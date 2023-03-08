@@ -29,11 +29,72 @@ class BUHomePage extends StatefulWidget {
 
 class _BUHomePageState extends State<BUHomePage> {
   int _buCount = 0;
+  final buserNameController = TextEditingController();
+  final buPasswordController = TextEditingController();
 
-  void _AddCount() {
-    setState(() {
+  @override
+  void initState() {
+    super.initState();
+    buPasswordController.text = '';
+    buserNameController.text = '';
+    print('initStateCalled....');
+  }
+
+  @override
+  void dispose() {
+    buPasswordController.dispose();
+    buserNameController.dispose();
+    super.dispose();
+  }
+
+  void _SubmitInputs() async {
+    /*   setState(() {
       _buCount += 20;
-    });
+    }); */
+    if (buPasswordController.text != '' && buserNameController.text != '') {
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text(
+                'Confirmed UserName: ${buserNameController.text} and Password: ${buPasswordController.text}'),
+          );
+        },
+      );
+      setState(() {
+        buPasswordController.text = '';
+        buserNameController.text = '';
+      });
+    } else if (buPasswordController.text == '' &&
+        buserNameController.text != '') {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text('Empty Password Field!'),
+          );
+        },
+      );
+    } else if (buserNameController.text == '' &&
+        buPasswordController.text != '') {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text('Empty User Name Field!'),
+          );
+        },
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text('Invalid Entry!'),
+          );
+        },
+      );
+    }
   }
 
   @override
@@ -44,30 +105,53 @@ class _BUHomePageState extends State<BUHomePage> {
       ),
       body: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          const Text(
+          Text(
             'User Info',
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
           Text(
             'User Name',
-            style: Theme.of(context).textTheme.headlineLarge,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: TextField(
+              controller: buserNameController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter User Name',
+              ),
+            ),
           ),
           Text(
             'Password',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-          Text(
-            '$_buCount',
             style: Theme.of(context).textTheme.bodyMedium,
-          )
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: TextField(
+              controller: buPasswordController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter Password',
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: FloatingActionButton(
+              onPressed: _SubmitInputs,
+              tooltip: 'Enter',
+              child: const Icon(Icons.send),
+              //style:FloatingActionButtonLocation.startFloat
+            ),
+            //,
+          ),
         ],
       )),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _AddCount,
-        tooltip: 'Add',
-        child: const Icon(Icons.add),
-      ),
+      //
     );
   }
 }
