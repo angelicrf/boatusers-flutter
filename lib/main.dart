@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:boatusers/src/redux/store.dart';
+import 'package:boatusers/src/models/post.dart';
+import 'package:boatusers/src/redux/posts/post_action.dart';
 
 void main() {
   runApp(const BoatUsersApp());
@@ -9,12 +13,14 @@ class BoatUsersApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Boat Users',
-      theme: ThemeData(
-        primarySwatch: Colors.cyan,
-      ),
-      home: const BUHomePage(buTitle: 'Boat Users App'),
-    );
+        title: 'Boat Users',
+        theme: ThemeData(
+          primarySwatch: Colors.cyan,
+        ),
+        home: StoreProvider<StoreState>(
+          store: Redux.store,
+          child: BUHomePage(buTitle: 'Boat Users App'),
+        ));
   }
 }
 
@@ -35,8 +41,6 @@ class _BUHomePageState extends State<BUHomePage> {
   @override
   void initState() {
     super.initState();
-    buPasswordController.text = '';
-    buserNameController.text = '';
     print('initStateCalled....');
   }
 
@@ -45,6 +49,14 @@ class _BUHomePageState extends State<BUHomePage> {
     buPasswordController.dispose();
     buserNameController.dispose();
     super.dispose();
+  }
+
+  _onFetchPostsPressed() async {
+    await Redux.store.dispatch(fetchPostsAction);
+    print('onFetchCalled');
+    setState(() {
+      this._buCount += 20;
+    });
   }
 
   void _SubmitInputs() async {
@@ -129,6 +141,10 @@ class _BUHomePageState extends State<BUHomePage> {
             'Password',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
+          Text(
+            '$_buCount',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: TextField(
@@ -149,9 +165,68 @@ class _BUHomePageState extends State<BUHomePage> {
             ),
             //,
           ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: FloatingActionButton(
+              onPressed: _onFetchPostsPressed,
+              tooltip: 'Get Data',
+              child: const Icon(Icons.get_app),
+            ),
+            //,
+          ),
+/*           FutureBuilder(
+              future: Future.delayed(Duration(seconds: 10)),
+              builder: (c, s) => s.connectionState == ConnectionState.done ? */
+          StoreConnector<StoreState, bool>(
+            distinct: true,
+            converter: (store) => store.state.postsState.isLoading,
+            builder: (context, isLoading) {
+              if (isLoading) {
+                return CircularProgressIndicator();
+              } else {
+                return SizedBox.shrink();
+              }
+            },
+          ),
+          // : Text("Loading...")),
+          StoreConnector<StoreState, bool>(
+            distinct: true,
+            converter: (store) => store.state.postsState.isError,
+            builder: (context, isError) {
+              if (isError) {
+                return Text("Failed to get posts");
+              } else {
+                return SizedBox.shrink();
+              }
+            },
+          ),
+          Expanded(
+              child: StoreConnector<StoreState, List<Post>>(
+            distinct: true,
+            converter: (store) => store.state.postsState.thisPost,
+            builder: (context, posts) {
+              if (posts.isNotEmpty) {
+                return ListView(children: _buildPosts(posts));
+              } else {
+                return Text('No Data');
+              }
+            },
+          ))
         ],
       )),
       //
     );
+  }
+
+  List<Widget> _buildPosts(List<Post> posts) {
+    return posts
+        .map(
+          (post) => ListTile(
+            title: Text(post.title),
+            subtitle: Text(post.body),
+            key: Key(post.id.toString()),
+          ),
+        )
+        .toList();
   }
 }

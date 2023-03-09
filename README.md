@@ -2,15 +2,14 @@
 
 A new Flutter project.
 
-## Getting Started
+# Commands to Run
 
-This project is a starting point for a Flutter application.
+# To initialize the dependencies, flutter sdk and tools
 
-A few resources to get you started if this is your first Flutter project:
+flutter pub get
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+# To run the app on Chrome and using the Chrome devtools
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+flutter run -d chrome
+
+# This app is used to be non-nullable with the sdk version of flutter beta to be compatible with flutter_redux and flutter_thunk
