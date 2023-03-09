@@ -4,7 +4,7 @@ A new Flutter project.
 
 # Commands to Run
 
-# To initialize the dependencies, flutter sdk and tools
+# To initialize the dependencies, flutter sdk and dart tools
 
 flutter pub get
 
