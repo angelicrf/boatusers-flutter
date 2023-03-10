@@ -1,11 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:boatusers/src/redux/store.dart';
 import 'package:boatusers/src/models/post.dart';
 import 'package:boatusers/src/redux/posts/post_action.dart';
 
-void main() {
+void main() async {
   runApp(const BoatUsersApp());
+  if (!kIsWeb) {
+    Redux();
+  }
 }
 
 class BoatUsersApp extends StatelessWidget {

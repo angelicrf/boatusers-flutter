@@ -1,5 +1,3 @@
-import 'dart:js_util';
-
 class Post {
   int id = 0;
   String userId = '';
