@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:boatusers/components/about.dart';
 import 'package:boatusers/src/redux/posts/post_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -91,14 +92,16 @@ class _BUHomePageState extends State<BUHomePage> {
 
   void _SubmitInputs() async {
     if (buPasswordController.text != '' && buserNameController.text != '') {
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text(
-                'Confirmed UserName: ${buserNameController.text} and Password: ${buPasswordController.text}'),
-          );
-        },
+      String appUName = buserNameController.text;
+      String appPwd = buPasswordController.text;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => About(
+            appUserName: '$appUName',
+            appUserPassword: '$appPwd',
+          ),
+        ),
       );
       setState(() {
         buPasswordController.text = '';
