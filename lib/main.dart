@@ -9,14 +9,13 @@ import 'package:boatusers/src/redux/store.dart';
 import 'package:boatusers/src/models/post.dart';
 import 'package:boatusers/src/redux/posts/post_action.dart';
 import 'package:http/http.dart' as http;
+import 'package:redux_persist_flutter/redux_persist_flutter.dart';
 
 import 'src/redux/store.dart';
 
 void main() async {
   runApp(const BoatUsersApp());
-  if (!kIsWeb) {
-    Redux();
-  }
+  Redux();
 }
 
 class BoatUsersApp extends StatelessWidget {
@@ -71,33 +70,22 @@ class _BUHomePageState extends State<BUHomePage> {
   }
 
   _onFetchPostsPressed() async {
-    if (kIsWeb) {
-      await Redux.store.dispatch(fetchPostsAction);
-      print('onFetchCalled');
+    await Redux.store.dispatch(PostState(true, false, <Post>[] as List<Post>));
+    try {
+      final response = await http
+          .get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+      assert(response.statusCode == 200);
+      final jsonData = json.decode(response.body);
+      var thisValue = Post.listofObjects(jsonData);
+
+      await Redux.store.dispatch(
+        PostState(false, false, thisValue),
+      );
       setState(() {
         this._buCount += 20;
       });
-    } else {
-      //Future.delayed(Duration.zero, () async {
-      await Redux.store
-          .dispatch(PostState(true, false, <Post>[] as List<Post>));
-      try {
-        final response = await http
-            .get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
-        assert(response.statusCode == 200);
-        final jsonData = json.decode(response.body);
-        var thisValue = Post.listofObjects(jsonData);
-
-        await Redux.store.dispatch(
-          PostState(false, false, thisValue),
-        );
-        setState(() {
-          this._buCount += 20;
-        });
-      } catch (error) {
-        Redux.store.dispatch(PostState(false, true, <Post>[] as List<Post>));
-      }
-      //});
+    } catch (error) {
+      Redux.store.dispatch(PostState(false, true, <Post>[] as List<Post>));
     }
   }
 
@@ -156,6 +144,7 @@ class _BUHomePageState extends State<BUHomePage> {
       StoreProvider.of<StoreState>(context).state.postsState.thisPost =
           thisValue;
     }
+
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.buTitle),
