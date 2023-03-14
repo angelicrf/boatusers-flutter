@@ -1,9 +1,16 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:boatusers/src/redux/posts/post_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:boatusers/src/redux/store.dart';
 import 'package:boatusers/src/models/post.dart';
 import 'package:boatusers/src/redux/posts/post_action.dart';
+import 'package:http/http.dart' as http;
+
+import 'src/redux/store.dart';
 
 void main() async {
   runApp(const BoatUsersApp());
@@ -16,6 +23,7 @@ class BoatUsersApp extends StatelessWidget {
   const BoatUsersApp({super.key});
   @override
   Widget build(BuildContext context) {
+    print('firstClassCalled');
     return MaterialApp(
         title: 'Boat Users',
         theme: ThemeData(
@@ -23,14 +31,14 @@ class BoatUsersApp extends StatelessWidget {
         ),
         home: StoreProvider<StoreState>(
           store: Redux.store,
-          child: BUHomePage(buTitle: 'Boat Users App'),
+          child: BUHomePage('Boat Users App', UniqueKey()),
         ));
   }
 }
 
 class BUHomePage extends StatefulWidget {
-  const BUHomePage({super.key, required this.buTitle});
-
+  const BUHomePage(this.buTitle, this.key) : super(key: key);
+  final Key key;
   final String buTitle;
 
   @override
@@ -39,6 +47,8 @@ class BUHomePage extends StatefulWidget {
 
 class _BUHomePageState extends State<BUHomePage> {
   int _buCount = 0;
+  bool isRendered = false;
+
   final buserNameController = TextEditingController();
   final buPasswordController = TextEditingController();
 
@@ -49,6 +59,11 @@ class _BUHomePageState extends State<BUHomePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    print('stateupdated $_buCount');
+  }
+
+  @override
   void dispose() {
     buPasswordController.dispose();
     buserNameController.dispose();
@@ -56,17 +71,37 @@ class _BUHomePageState extends State<BUHomePage> {
   }
 
   _onFetchPostsPressed() async {
-    await Redux.store.dispatch(fetchPostsAction);
-    print('onFetchCalled');
-    setState(() {
-      this._buCount += 20;
-    });
+    if (kIsWeb) {
+      await Redux.store.dispatch(fetchPostsAction);
+      print('onFetchCalled');
+      setState(() {
+        this._buCount += 20;
+      });
+    } else {
+      Future.delayed(Duration.zero, () async {
+        await Redux.store
+            .dispatch(PostState(true, false, <Post>[] as List<Post>));
+        try {
+          final response = await http
+              .get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+          assert(response.statusCode == 200);
+          final jsonData = json.decode(response.body);
+          var thisValue = Post.listofObjects(jsonData);
+
+          await Redux.store.dispatch(
+            PostState(false, false, thisValue),
+          );
+          setState(() {
+            //this._buCount += 20;
+          });
+        } catch (error) {
+          Redux.store.dispatch(PostState(false, true, <Post>[] as List<Post>));
+        }
+      });
+    }
   }
 
   void _SubmitInputs() async {
-    /*   setState(() {
-      _buCount += 20;
-    }); */
     if (buPasswordController.text != '' && buserNameController.text != '') {
       await showDialog(
         context: context,
@@ -115,111 +150,139 @@ class _BUHomePageState extends State<BUHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var thisValue = Redux.store.state.postsState.thisPost;
+    print(thisValue);
+    var store = StoreProvider.of<StoreState>(context);
+    print(store);
+    if (thisValue.isNotEmpty) {
+      return Scaffold(
+        body: Center(
+            child: Column(
+          children: [
+            Expanded(
+                child: ListView.builder(
+              itemCount: thisValue.length,
+              itemBuilder: (context, index) {
+                print(thisValue[index].id);
+                return ListTile(
+                  title: Text(thisValue[index].title),
+                  subtitle: Text(thisValue[index].body),
+                  trailing: Text(thisValue[index].id.toString()),
+                );
+              },
+            ))
+          ],
+        )),
+      );
+    }
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.buTitle),
-      ),
-      body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'User Info',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-          Text(
-            'User Name',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextField(
-              controller: buserNameController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter User Name',
+        appBar: AppBar(
+          title: Text(widget.buTitle),
+          key: (widget.key),
+        ),
+        body: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'User Info',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+            Text(
+              'User Name',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: TextField(
+                controller: buserNameController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter User Name',
+                ),
               ),
             ),
-          ),
-          Text(
-            'Password',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          Text(
-            '$_buCount',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextField(
-              controller: buPasswordController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter Password',
+            Text(
+              'Password',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            Text(
+              '$_buCount',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: TextField(
+                controller: buPasswordController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter Password',
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: FloatingActionButton(
-              onPressed: _SubmitInputs,
-              tooltip: 'Enter',
-              child: const Icon(Icons.send),
-              //style:FloatingActionButtonLocation.startFloat
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: FloatingActionButton(
+                onPressed: _SubmitInputs,
+                tooltip: 'Enter',
+                child: const Icon(Icons.send),
+                //style:FloatingActionButtonLocation.startFloat
+              ),
+              //,
             ),
-            //,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: FloatingActionButton(
-              onPressed: _onFetchPostsPressed,
-              tooltip: 'Get Data',
-              child: const Icon(Icons.get_app),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: FloatingActionButton(
+                onPressed: _onFetchPostsPressed,
+                heroTag: null,
+                tooltip: 'Get Data',
+                child: const Icon(Icons.get_app),
+              ),
+              //,
             ),
-            //,
-          ),
 /*           FutureBuilder(
               future: Future.delayed(Duration(seconds: 10)),
               builder: (c, s) => s.connectionState == ConnectionState.done ? */
-          StoreConnector<StoreState, bool>(
-            distinct: true,
-            converter: (store) => store.state.postsState.isLoading,
-            builder: (context, isLoading) {
-              if (isLoading) {
-                return CircularProgressIndicator();
-              } else {
-                return SizedBox.shrink();
-              }
-            },
-          ),
-          // : Text("Loading...")),
-          StoreConnector<StoreState, bool>(
-            distinct: true,
-            converter: (store) => store.state.postsState.isError,
-            builder: (context, isError) {
-              if (isError) {
-                return Text("Failed to get posts");
-              } else {
-                return SizedBox.shrink();
-              }
-            },
-          ),
-          Expanded(
-              child: StoreConnector<StoreState, List<Post>>(
-            distinct: true,
-            converter: (store) => store.state.postsState.thisPost,
-            builder: (context, posts) {
-              if (posts.isNotEmpty) {
-                return ListView(children: _buildPosts(posts));
-              } else {
-                return Text('No Data');
-              }
-            },
-          ))
-        ],
-      )),
-      //
-    );
+            StoreConnector<StoreState, bool>(
+              distinct: true,
+              converter: (store) => store.state.postsState.isLoading,
+              builder: (context, isLoading) {
+                if (isLoading) {
+                  return CircularProgressIndicator();
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
+            ),
+            // : Text("Loading...")),
+            StoreConnector<StoreState, bool>(
+              distinct: true,
+              converter: (store) => store.state.postsState.isError,
+              builder: (context, isError) {
+                if (isError) {
+                  return Text("Failed to get posts");
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
+            ),
+            Expanded(
+                child: StoreConnector<StoreState, List<Post>>(
+              distinct: true,
+              converter: (store) => store.state.postsState.thisPost,
+              builder: (context, posts) {
+                print(posts);
+                if (posts.isNotEmpty) {
+                  return ListView(children: _buildPosts(posts));
+                } else {
+                  return Text('No Data');
+                }
+              },
+            ))
+          ],
+        ))
+        //
+        );
   }
 
   List<Widget> _buildPosts(List<Post> posts) {

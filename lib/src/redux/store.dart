@@ -1,11 +1,14 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:redux/redux.dart';
 import 'package:boatusers/src/redux/posts/post_action.dart';
 import 'package:boatusers/src/redux/posts/post_state.dart';
 import 'package:boatusers/src/redux/posts/post_reducer.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:redux_persist_flutter/redux_persist_flutter.dart';
 import 'package:redux_persist/redux_persist.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -13,6 +16,7 @@ import '../models/post.dart';
 //import 'package:redux_p';
 
 StoreState appReducer(StoreState storestate, dynamic action) {
+  print(action);
   if (action is PostState) {
     //print(action.thisPost);
     final nextPostsState = postReducer(storestate.postsState, action);
@@ -38,10 +42,18 @@ class StoreState {
     );
   }
 
-  static StoreState fromJson(dynamic json) =>
-      StoreState(postsState: json["isLoading"] as PostState);
+  static StoreState fromJson(dynamic json) {
+    PostState initUser = PostState(false, false, <Post>[] as List<Post>);
+    return StoreState(postsState: initUser);
+  }
 
-  dynamic toJson() => {'isLoading': postsState.isLoading};
+  dynamic toJson() => {
+        'isLoading': postsState.isLoading,
+        'isError': postsState.isError,
+        'thisPost':
+            //(Post data) => json.encode(data).toString()
+            jsonEncode(List<Post>.from(postsState.thisPost))
+      };
 }
 
 class Redux {
@@ -52,7 +64,6 @@ class Redux {
   );
 
   Redux() {
-    //init().then((value) => print(value));
     print(getNewRedux());
   }
   getNewRedux() async {
@@ -70,22 +81,35 @@ class Redux {
     }
   }
 
+  static Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
   static Future<dynamic> init() async {
-    //location: FlutterSaveLocation.documentFile
+    // /data/user/0/com.example.boatusers/app_flutter
+    final path = await _localPath;
+
     final persistor = Persistor<StoreState>(
-      storage: FlutterStorage(),
+      storage: FileStorage(File("$path/boatuserstate.json")),
       serializer: JsonSerializer<StoreState>(StoreState.fromJson),
     );
     print('heredata');
+
     final postsStateInitial = PostState.initial();
-    var persLoad = await persistor.load();
-    print('afterload');
-    _store = Store<StoreState>(
-      appReducer,
-      middleware: [persistor.createMiddleware()],
-      initialState: persLoad ?? StoreState(postsState: postsStateInitial),
-    );
-    print(_store);
-    return _store;
+
+    try {
+      var persLoad = await persistor.load();
+      print('afterload');
+      _store = Store<StoreState>(
+        appReducer,
+        middleware: [persistor.createMiddleware()],
+        initialState: persLoad ?? StoreState(postsState: postsStateInitial),
+      );
+      return _store;
+    } catch (e) {
+      print(e);
+    }
   }
 }

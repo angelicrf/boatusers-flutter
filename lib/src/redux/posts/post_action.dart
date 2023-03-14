@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import '../store.dart';
 
 Future<void> fetchPostsAction(Store<StoreState> store) async {
+  print('methodCalled');
   await store.dispatch(PostState(true, false, <Post>[] as List<Post>));
 
   try {
