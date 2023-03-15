@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:boatusers/components/about.dart';
+import 'package:boatusers/components/footerMb.dart';
+import 'package:boatusers/components/footerWeb.dart';
 import 'package:boatusers/src/redux/posts/post_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,6 @@ import 'package:boatusers/src/models/post.dart';
 import 'package:boatusers/src/redux/posts/post_action.dart';
 import 'package:http/http.dart' as http;
 import 'package:redux_persist_flutter/redux_persist_flutter.dart';
-
 import 'src/redux/store.dart';
 
 void main() async {
@@ -48,6 +48,11 @@ class BUHomePage extends StatefulWidget {
 class _BUHomePageState extends State<BUHomePage> {
   int _buCount = 0;
   bool isRendered = false;
+  int _indexSelected = 0;
+  PageController _controller = PageController(
+    initialPage: 0,
+    keepPage: true,
+  );
 
   final buserNameController = TextEditingController();
   final buPasswordController = TextEditingController();
@@ -65,6 +70,7 @@ class _BUHomePageState extends State<BUHomePage> {
 
   @override
   void dispose() {
+    _controller?.dispose();
     buPasswordController.dispose();
     buserNameController.dispose();
     super.dispose();
@@ -149,12 +155,13 @@ class _BUHomePageState extends State<BUHomePage> {
     }
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.buTitle),
-          key: (widget.key),
-        ),
-        body: Center(
-            child: Column(
+      appBar: AppBar(
+        title: Text(widget.buTitle),
+        key: (widget.key),
+      ),
+      body: Center(
+        //controller: _controller,
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Text(
@@ -251,11 +258,21 @@ class _BUHomePageState extends State<BUHomePage> {
                   return Text('No Data');
                 }
               },
-            ))
+            )),
+            (() {
+              if (!kIsWeb) {
+                return Container(
+                  color: Colors.amber,
+                  child: FooterMB(),
+                );
+              } else
+                return SizedBox.shrink();
+            }())
           ],
-        ))
-        //
-        );
+        ),
+      ),
+      bottomNavigationBar: kIsWeb ? FooterWeb() : SizedBox.shrink(),
+    );
   }
 
   List<Widget> _buildPosts(List<Post> posts) {
