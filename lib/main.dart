@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:boatusers/components/about.dart';
 import 'package:boatusers/components/footerMb.dart';
 import 'package:boatusers/components/footerWeb.dart';
+import 'package:boatusers/components/mainWidgets.dart';
 import 'package:boatusers/src/redux/posts/post_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:boatusers/src/models/post.dart';
 import 'package:boatusers/src/redux/posts/post_action.dart';
 import 'package:http/http.dart' as http;
 import 'package:redux_persist_flutter/redux_persist_flutter.dart';
+import 'components/storeCMainWidgets.dart';
 import 'src/redux/store.dart';
 
 void main() async {
@@ -49,11 +51,8 @@ class _BUHomePageState extends State<BUHomePage> {
   int _buCount = 0;
   bool isRendered = false;
   int _indexSelected = 0;
-  PageController _controller = PageController(
-    initialPage: 0,
-    keepPage: true,
-  );
-
+  late List<Widget> mWidgets;
+  late List<Widget> stCWidgets;
   final buserNameController = TextEditingController();
   final buPasswordController = TextEditingController();
 
@@ -70,7 +69,6 @@ class _BUHomePageState extends State<BUHomePage> {
 
   @override
   void dispose() {
-    _controller?.dispose();
     buPasswordController.dispose();
     buserNameController.dispose();
     super.dispose();
@@ -147,8 +145,13 @@ class _BUHomePageState extends State<BUHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    stCWidgets = StoreCMainWidgets(context).storeConnectorW();
+    mWidgets = MainWidgets().thisW(context, buserNameController,
+        buPasswordController, _buCount, _SubmitInputs, _onFetchPostsPressed);
+
     if (!kIsWeb) {
       var thisValue = Redux.store.state.postsState.thisPost;
+
       print(thisValue);
       StoreProvider.of<StoreState>(context).state.postsState.thisPost =
           thisValue;
@@ -160,105 +163,11 @@ class _BUHomePageState extends State<BUHomePage> {
         key: (widget.key),
       ),
       body: Center(
-        //controller: _controller,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Text(
-              'User Info',
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-            Text(
-              'User Name',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextField(
-                controller: buserNameController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter User Name',
-                ),
-              ),
-            ),
-            Text(
-              'Password',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            Text(
-              '$_buCount',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextField(
-                controller: buPasswordController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter Password',
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: FloatingActionButton(
-                onPressed: _SubmitInputs,
-                tooltip: 'Enter',
-                child: const Icon(Icons.send),
-                //style:FloatingActionButtonLocation.startFloat
-              ),
-              //,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: FloatingActionButton(
-                onPressed: _onFetchPostsPressed,
-                heroTag: null,
-                tooltip: 'Get Data',
-                child: const Icon(Icons.get_app),
-              ),
-              //,
-            ),
-/*           FutureBuilder(
-              future: Future.delayed(Duration(seconds: 10)),
-              builder: (c, s) => s.connectionState == ConnectionState.done ? */
-            StoreConnector<StoreState, bool>(
-              distinct: true,
-              converter: (store) => store.state.postsState.isLoading,
-              builder: (context, isLoading) {
-                if (isLoading) {
-                  return CircularProgressIndicator();
-                } else {
-                  return SizedBox.shrink();
-                }
-              },
-            ),
-            // : Text("Loading...")),
-            StoreConnector<StoreState, bool>(
-              distinct: true,
-              converter: (store) => store.state.postsState.isError,
-              builder: (context, isError) {
-                if (isError) {
-                  return Text("Failed to get posts");
-                } else {
-                  return SizedBox.shrink();
-                }
-              },
-            ),
-            Expanded(
-                child: StoreConnector<StoreState, List<Post>>(
-              distinct: true,
-              converter: (store) => store.state.postsState.thisPost,
-              builder: (context, posts) {
-                print(posts);
-                if (posts.isNotEmpty) {
-                  return ListView(children: _buildPosts(posts));
-                } else {
-                  return Text('No Data');
-                }
-              },
-            )),
+            ...mWidgets,
+            ...stCWidgets,
             (() {
               if (!kIsWeb) {
                 return Container(
@@ -273,17 +182,5 @@ class _BUHomePageState extends State<BUHomePage> {
       ),
       bottomNavigationBar: kIsWeb ? FooterWeb() : SizedBox.shrink(),
     );
-  }
-
-  List<Widget> _buildPosts(List<Post> posts) {
-    return posts
-        .map(
-          (post) => ListTile(
-            title: Text(post.title),
-            subtitle: Text(post.body),
-            key: Key(post.id.toString()),
-          ),
-        )
-        .toList();
   }
 }
