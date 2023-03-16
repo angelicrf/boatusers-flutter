@@ -2,7 +2,7 @@ import 'package:boatusers/components/userProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-
+import '../routes/buRouts.dart';
 import 'boatItems.dart';
 import 'favorites.dart';
 
@@ -65,28 +65,16 @@ class _FooterMBState extends State<FooterMB> {
       (int r, BuildContext context) {
     switch (r) {
       case 0:
-        Navigator.pushNamed(context, '/');
+        Navigator.pushNamed(context, BuRouts.BUHome);
         break;
       case 1:
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Favorites(),
-            ));
+        Navigator.pushNamed(context, BuRouts.BUFavorites);
         break;
       case 2:
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BoatItems(),
-            ));
+        Navigator.pushNamed(context, BuRouts.BUItems);
         break;
       case 3:
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => UserProfile(),
-            ));
+        Navigator.pushNamed(context, BuRouts.BUserProfile);
         break;
     }
   };

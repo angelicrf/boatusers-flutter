@@ -4,6 +4,7 @@ import 'package:boatusers/components/about.dart';
 import 'package:boatusers/components/footerMb.dart';
 import 'package:boatusers/components/footerWeb.dart';
 import 'package:boatusers/components/mainWidgets.dart';
+import 'package:boatusers/routes/routesHandler.dart';
 import 'package:boatusers/src/redux/posts/post_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,14 +27,16 @@ class BoatUsersApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('firstClassCalled');
-    return MaterialApp(
-        title: 'Boat Users',
-        theme: ThemeData(
-          primarySwatch: Colors.cyan,
-        ),
-        home: StoreProvider<StoreState>(
-          store: Redux.store,
-          child: BUHomePage('Boat Users App', UniqueKey()),
+    return StoreProvider<StoreState>(
+        store: Redux.store,
+        child: MaterialApp(
+          title: 'Boat Users',
+          theme: ThemeData(
+            primarySwatch: Colors.cyan,
+          ),
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: handleRoutes,
+          home: BUHomePage('Boat Users App', UniqueKey()),
         ));
   }
 }
