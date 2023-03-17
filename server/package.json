@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "buServer",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index",
+    "client-web": "cd .. && flutter run -d chrome",
+    "client-android": "cd .. && flutter run",
+    "dev-device": "concurrently \"npm start\" \"npm run client-android\"",
+    "dev-web": "concurrently \"npm start\" \"npm run client-web\""
+  },
+  "author": "BUsers",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^7.6.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.2",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^2.0.21"
+  }
+}
