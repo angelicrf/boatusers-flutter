@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:boatusers/components/boatItems.dart';
 import 'package:boatusers/components/favorites.dart';
 import 'package:boatusers/components/userProfile.dart';

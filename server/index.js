@@ -1,5 +1,10 @@
+require('dotenv').config({ path: './.env' })
 const express = require('express')
+const cors = require('cors')
+const upload = require('./middleware/multermiddleware')
+const { mndbConnection } = require('./mangoDbConnection')
 const app = express()
+const path = require('path')
 const port = process.env.PORT || 3000
 
 const {
@@ -11,15 +16,17 @@ const {
 } = require('./schemas/mongodbFuncs')
 require('dotenv').config({ path: './.env' })
 
+app.use(cors())
 var bodyParser = require('body-parser')
-const { reset } = require('nodemon')
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+let conn = mndbConnection()
 app.get('/', async (req, res) => {
   return res.json({ msg: 'buHome' })
 })
-app.post('/api/postData', async (req, res) => {
+app.post('/api/postData', upload.single('buFile'), async (req, res) => {
   let getResult = await mnDbInsert()
   if (getResult.err == null && getResult !== 'exists') {
     return res.status(200).json({ msg: getResult })
@@ -30,8 +37,9 @@ app.post('/api/postData', async (req, res) => {
   }
 })
 app.get('/api/getData', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
   let getResult = await mnDbGet()
-  if (getResult.err == null && getResult !== 'exists') {
+  if (getResult.err == null) {
     return res.status(200).json({ msg: getResult })
   } else {
     return res.status(400).json({ msg: 'mndbGet Error' })

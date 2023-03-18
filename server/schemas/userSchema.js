@@ -1,7 +1,4 @@
 const mongoose = require('mongoose')
-const { mndbConnection } = require('../mangoDbConnection')
-
-let conn = mndbConnection()
 
 const UserSchema = new mongoose.Schema(
   {
