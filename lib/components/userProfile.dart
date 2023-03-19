@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:boatusers/components/apiUserProfileFuncs.dart';
 import 'package:boatusers/components/searchWidget.dart';
 import 'package:boatusers/components/userProfileModel.dart';
@@ -15,16 +13,24 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   final searchController = TextEditingController();
   final formController = TextEditingController();
+  final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String testData = 'Default';
+  bool isGetMngDb = false;
+  bool isPostMngDb = false;
 
   @override
   void dispose() {
     print('disposed...');
     formController.text = '';
+    passwordController.text = '';
     searchController.dispose();
     formController.dispose();
+    passwordController.dispose();
     super.dispose();
+  }
+
+  bool thisFunbool() {
+    return true;
   }
 
   @override
@@ -45,12 +51,25 @@ class _UserProfileState extends State<UserProfile> {
               height: 144.0,
               child: Text('User Profile Page'),
             ),
-            userProfileForm(_formKey, context, formController, setState),
-            mngDbGetDataDisplay(formController, setState),
-            const SizedBox(
+            userProfileForm(
+                _formKey,
+                context,
+                formController,
+                passwordController,
+                () => setState(() {
+                      isPostMngDb = true;
+                    }),
+                () => setState(() {
+                      isGetMngDb = true;
+                    })),
+            mngDbGetDataDisplay(
+                isGetMngDb, () => setState(() => isPostMngDb = false)),
+            mngDbPostDataDisplay(isPostMngDb, formController,
+                passwordController, () => setState(() => isGetMngDb = false)),
+            SizedBox(
               //padding: const EdgeInsets.all(2.0),
               height: 60.0,
-              child: Text('DataPage'),
+              child: Text(isGetMngDb.toString()),
             )
           ],
         ));
@@ -61,7 +80,9 @@ Widget userProfileForm(
     GlobalKey<FormState> _formKey,
     BuildContext context,
     TextEditingController formController,
-    void Function(void Function() thisFunc) thisState) {
+    TextEditingController passwordController,
+    void Function() thisState,
+    void Function() thisBoolState) {
   return Form(
     key: _formKey,
     child: Column(
@@ -70,13 +91,14 @@ Widget userProfileForm(
         TextFormField(
           controller: formController,
           decoration: const InputDecoration(
-            enabledBorder: UnderlineInputBorder(
+            enabledBorder: OutlineInputBorder(
                 borderSide:
                     BorderSide(color: Color.fromARGB(255, 138, 47, 47))),
-            focusedBorder: UnderlineInputBorder(
+            focusedBorder: OutlineInputBorder(
                 borderSide:
                     BorderSide(color: Color.fromARGB(255, 47, 20, 146))),
-            hintText: 'Enter Text',
+            hintText: 'Enter User Name',
+            contentPadding: EdgeInsets.all(2.2),
             hintStyle: TextStyle(
               color: Color.fromARGB(153, 136, 17, 17),
               fontSize: 20,
@@ -90,6 +112,29 @@ Widget userProfileForm(
             return null;
           },
         ),
+        TextFormField(
+          controller: passwordController,
+          decoration: const InputDecoration(
+            enabledBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: Color.fromARGB(255, 138, 47, 47))),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color.fromRGBO(47, 20, 146, 1))),
+            hintText: 'Enter Password',
+            contentPadding: EdgeInsets.all(2.2),
+            hintStyle: TextStyle(
+              color: Color.fromARGB(153, 136, 17, 17),
+              fontSize: 20,
+            ),
+          ),
+          // The validator receives the text that the user has entered.
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your password';
+            }
+            return null;
+          },
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: ElevatedButton(
@@ -98,21 +143,28 @@ Widget userProfileForm(
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Processing Data')),
                 );
-                thisState(() {});
+                thisState();
               }
             },
             child: const Text('Submit'),
           ),
         ),
+        Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: FloatingActionButton(
+                backgroundColor: Colors.green,
+                child: Icon(Icons.data_array),
+                onPressed: () {
+                  thisBoolState();
+                })),
       ],
     ),
   );
 }
 
-Widget mngDbGetDataDisplay(TextEditingController formController,
-    void Function(void Function() thisFunc) thisState) {
-  if (formController.text != '') {
-    thisState(() {});
+Widget mngDbGetDataDisplay(bool isMngdbGet, void Function() thisState) {
+  if (isMngdbGet) {
+    thisState();
     return Expanded(
         child: FutureBuilder<List<UserProfileModel>>(
       future: APIUserProfileFuncs.getAllUsers(),
@@ -124,6 +176,32 @@ Widget mngDbGetDataDisplay(TextEditingController formController,
           );
         } else {
           return const Text('No Data');
+        }
+      },
+    ));
+  } else
+    return const SizedBox.shrink();
+}
+
+Widget mngDbPostDataDisplay(
+    bool isMngdbPost,
+    TextEditingController formController,
+    TextEditingController passwordController,
+    void Function() thisState) {
+  if (isMngdbPost) {
+    thisState();
+    return Expanded(
+        child: FutureBuilder<List<UserProfileModel>>(
+      future: APIUserProfileFuncs.postUser(
+          formController.text, passwordController.text),
+      builder: (context, posts) {
+        print(posts);
+        if (posts.hasData) {
+          return ListView(
+            children: APIUserProfileFuncs.buildMngData(posts.data!),
+          );
+        } else {
+          return const Text('No Data To Insert');
         }
       },
     ));

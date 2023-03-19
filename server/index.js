@@ -27,7 +27,9 @@ app.get('/', async (req, res) => {
   return res.json({ msg: 'buHome' })
 })
 app.post('/api/postData', upload.single('buFile'), async (req, res) => {
-  let getResult = await mnDbInsert()
+  console.log(req.body.buName)
+
+  let getResult = await mnDbInsert(req.body.buName, req.body.buPassword)
   if (getResult.err == null && getResult !== 'exists') {
     return res.status(200).json({ msg: getResult })
   } else if (getResult.err == null && getResult == 'exists') {

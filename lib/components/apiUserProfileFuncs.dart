@@ -39,4 +39,39 @@ class APIUserProfileFuncs {
         )
         .toList();
   }
+
+  static Future<List<UserProfileModel>> postUser(
+      thisUserName, thisPassword) async {
+    List thisList = List.empty(growable: true);
+    Map<String, dynamic> body = {
+      'buName': '$thisUserName',
+      'buPassword': '$thisPassword',
+    };
+    var httpUrl = kIsWeb
+        ? 'http://172.17.0.1:3000/api/postData'
+        : 'http://10.0.2.2:3000/api/postData';
+    final response = await http.post(Uri.parse(httpUrl),
+        headers: {
+          "Accept": "application/json",
+          "Access-Control-Allow_Origin": "*"
+        },
+        body: body);
+    print(jsonDecode(response.body)['msg']);
+
+    if (response.statusCode == 200) {
+      thisList.add(jsonDecode(response.body)['msg']);
+      if (thisList.isNotEmpty) {
+        print('thislist is not empty');
+        return thisList
+            .map((value) => UserProfileModel.fromJson(value))
+            .toList();
+      } else {
+        return thisList
+            .map((value) => UserProfileModel.fromJson(value))
+            .toList();
+      }
+    } else {
+      throw Exception('Error from Post data');
+    }
+  }
 }

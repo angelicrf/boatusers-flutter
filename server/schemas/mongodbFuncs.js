@@ -1,20 +1,21 @@
 const mogoose = require('mongoose')
 const UserSchema = require('./userSchema')
 
-const dataExists = async () => {
-  let found = await UserSchema.findOne({ buName: 'Angy' })
-  if (found._id !== null) {
+const dataExists = async (buName) => {
+  let found = await UserSchema.findOne({ buName: `${buName}` })
+  console.log('fountId is', found)
+  if (found !== null) {
     return true
   }
 }
-const mnDbInsert = () => {
+const mnDbInsert = (buName, buPassword) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let isExist = await dataExists()
+      let isExist = await dataExists(buName)
       if (!isExist) {
         let buData = new UserSchema({
-          buName: 'Tim',
-          buPassword: '98547',
+          buName: `${buName}`,
+          buPassword: `${buPassword}`,
         })
         if (buData.buName !== '') {
           try {
