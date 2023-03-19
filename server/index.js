@@ -55,8 +55,9 @@ app.get('/api/getId', async (req, res) => {
     return res.status(400).json({ msg: 'mndbGetById Error' })
   }
 })
-app.post('/api/deleteData', async (req, res) => {
+app.delete('/api/deleteData', async (req, res) => {
   let getReq = req.query.buName
+  console.log(getReq)
   if (getReq != undefined) {
     let result = await mnDbDelete(getReq)
     if (result.err == null) {
@@ -67,16 +68,12 @@ app.post('/api/deleteData', async (req, res) => {
     }
   }
 })
-app.post('/api/updateData', async (req, res) => {
-  let getReq = req.query.buName
-  let updatedParams = req.query.newData
-  if (getReq !== undefined && updatedParams !== undefined) {
-    let result = await mnDbUpdate(getReq)
-    if (result.err == null) {
-      return res.json({ msg: result })
-    } else {
-      return res.status(400).json({ msg: 'mndbUpdate Error' })
-    }
+app.put('/api/updateData', async (req, res) => {
+  let result = await mnDbUpdate(req.query.thisId, req.body)
+  if (result.err == null) {
+    return res.json({ msg: result })
+  } else {
+    return res.status(400).json({ msg: 'mndbUpdate Error' })
   }
 })
 

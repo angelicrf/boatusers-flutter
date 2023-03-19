@@ -38,7 +38,7 @@ const mnDbDelete = (thisName) => {
     try {
       let getId = await mnDbById(thisName)
       console.log(getId)
-      let doc = await UserSchema.findByIdAndRemove(getId)
+      let doc = await UserSchema.findByIdAndDelete(getId)
       if (doc !== null) {
         resolve(doc)
       }
@@ -47,20 +47,11 @@ const mnDbDelete = (thisName) => {
     }
   })
 }
-const mnDbUpdate = (thisName, newData) => {
+const mnDbUpdate = (thisId, newData) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let getId = await mnDbById(thisName)
-      console.log(getId)
-      let update =
-        newData.buPassword == undefined && newData.bUsername !== undefined
-          ? { bUsername: `${newData.bUsername}` }
-          : null
-      newData.buPassword !== undefined && newData.bUsername == undefined
-        ? { buPassword: `${newData.buPassword}` }
-        : null
-      if (update !== null) {
-        let doc = await UserSchema.findByIdAndUpdate(getId, update)
+      if (newData !== null) {
+        let doc = await UserSchema.findByIdAndUpdate(thisId, newData)
         if (doc !== null) {
           resolve(doc)
         }
