@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:boatusers/components/apiUserProfileFuncs.dart';
 import 'package:boatusers/components/searchWidget.dart';
 import 'package:boatusers/components/userProfileModel.dart';
@@ -14,9 +16,12 @@ class _UserProfileState extends State<UserProfile> {
   final searchController = TextEditingController();
   final formController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String myName = '';
+  String testData = 'Default';
+
   @override
   void dispose() {
+    print('disposed...');
+    formController.text = '';
     searchController.dispose();
     formController.dispose();
     super.dispose();
@@ -40,87 +45,23 @@ class _UserProfileState extends State<UserProfile> {
               height: 144.0,
               child: Text('User Profile Page'),
             ),
-            //userProfileForm(_formKey, context, formController, myName),
-            Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextFormField(
-                    controller: formController,
-                    decoration: const InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromARGB(255, 138, 47, 47))),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromARGB(255, 47, 20, 146))),
-                      hintText: 'Enter Text',
-                      hintStyle: TextStyle(
-                        color: Color.fromARGB(153, 136, 17, 17),
-                        fontSize: 20,
-                      ),
-                    ),
-                    // The validator receives the text that the user has entered.
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your username';
-                      }
-                      return null;
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          // api call
-                          var getData = await APIUserProfileFuncs.getAllUsers();
-                          print(getData);
-                          setState(() {
-                            this.myName = formController.text;
-                          });
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data')),
-                          );
-                        }
-                      },
-                      child: const Text('Submit'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Text(myName),
-            (() {
-              if (myName != '') {
-                print('name is not null');
-                return mngDbGetDataDisplay();
-              } else
-                return SizedBox.shrink();
-            }())
+            userProfileForm(_formKey, context, formController, setState),
+            mngDbGetDataDisplay(formController, setState),
+            const SizedBox(
+              //padding: const EdgeInsets.all(2.0),
+              height: 60.0,
+              child: Text('DataPage'),
+            )
           ],
         ));
   }
 }
 
-Widget mngDbGetDataDisplay() {
-  return Expanded(
-      child: FutureBuilder<List<UserProfileModel>>(
-    future: APIUserProfileFuncs.getAllUsers(),
-    builder: (context, posts) {
-      if (posts.hasData) {
-        return ListView(
-            children: APIUserProfileFuncs.buildMngData(posts.data!));
-      } else {
-        return Text('No Data');
-      }
-    },
-  ));
-}
-
-Widget userProfileForm(GlobalKey<FormState> _formKey, BuildContext context,
-    TextEditingController formController, String thisName) {
+Widget userProfileForm(
+    GlobalKey<FormState> _formKey,
+    BuildContext context,
+    TextEditingController formController,
+    void Function(void Function() thisFunc) thisState) {
   return Form(
     key: _formKey,
     child: Column(
@@ -154,13 +95,10 @@ Widget userProfileForm(GlobalKey<FormState> _formKey, BuildContext context,
           child: ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
-                // api call
-                var getData = await APIUserProfileFuncs.getAllUsers();
-                print(getData);
-                thisName = formController.text;
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Processing Data')),
                 );
+                thisState(() {});
               }
             },
             child: const Text('Submit'),
@@ -169,4 +107,26 @@ Widget userProfileForm(GlobalKey<FormState> _formKey, BuildContext context,
       ],
     ),
   );
+}
+
+Widget mngDbGetDataDisplay(TextEditingController formController,
+    void Function(void Function() thisFunc) thisState) {
+  if (formController.text != '') {
+    thisState(() {});
+    return Expanded(
+        child: FutureBuilder<List<UserProfileModel>>(
+      future: APIUserProfileFuncs.getAllUsers(),
+      builder: (context, posts) {
+        if (posts.hasData) {
+          return ListView(
+            //shrinkWrap: true,
+            children: APIUserProfileFuncs.buildMngData(posts.data!),
+          );
+        } else {
+          return const Text('No Data');
+        }
+      },
+    ));
+  } else
+    return const SizedBox.shrink();
 }
