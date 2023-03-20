@@ -63,9 +63,13 @@ class _UserProfileState extends State<UserProfile> {
                       isGetMngDb = true;
                     })),
             mngDbGetDataDisplay(
-                isGetMngDb, () => setState(() => isPostMngDb = false)),
-            mngDbPostDataDisplay(isPostMngDb, formController,
-                passwordController, () => setState(() => isGetMngDb = false)),
+                isGetMngDb, () => setState(() => isPostMngDb = false), context),
+            mngDbPostDataDisplay(
+                isPostMngDb,
+                formController,
+                passwordController,
+                () => setState(() => isGetMngDb = false),
+                context),
             SizedBox(
               //padding: const EdgeInsets.all(2.0),
               height: 60.0,
@@ -162,7 +166,8 @@ Widget userProfileForm(
   );
 }
 
-Widget mngDbGetDataDisplay(bool isMngdbGet, void Function() thisState) {
+Widget mngDbGetDataDisplay(
+    bool isMngdbGet, void Function() thisState, BuildContext context) {
   if (isMngdbGet) {
     thisState();
     return Expanded(
@@ -172,7 +177,7 @@ Widget mngDbGetDataDisplay(bool isMngdbGet, void Function() thisState) {
         if (posts.hasData) {
           return ListView(
             //shrinkWrap: true,
-            children: APIUserProfileFuncs.buildMngData(posts.data!),
+            children: APIUserProfileFuncs.buildMngData(posts.data!, context),
           );
         } else {
           return const Text('No Data');
@@ -187,7 +192,8 @@ Widget mngDbPostDataDisplay(
     bool isMngdbPost,
     TextEditingController formController,
     TextEditingController passwordController,
-    void Function() thisState) {
+    void Function() thisState,
+    BuildContext context) {
   if (isMngdbPost) {
     thisState();
     return Expanded(
@@ -198,7 +204,7 @@ Widget mngDbPostDataDisplay(
         print(posts);
         if (posts.hasData) {
           return ListView(
-            children: APIUserProfileFuncs.buildMngData(posts.data!),
+            children: APIUserProfileFuncs.buildMngData(posts.data!, context),
           );
         } else {
           return const Text('No Data To Insert');

@@ -1,5 +1,6 @@
 import 'package:boatusers/components/boatItems.dart';
 import 'package:boatusers/components/favorites.dart';
+import 'package:boatusers/components/profileUserUpdateForm.dart';
 import 'package:boatusers/components/userProfile.dart';
 import 'package:boatusers/main.dart';
 import 'package:boatusers/routes/buRouts.dart';
@@ -16,6 +17,8 @@ Route<dynamic> handleRoutes(RouteSettings thisSettings) {
       return _getPageRoute(thisSettings.name!, BoatItems());
     case BuRouts.BUserProfile:
       return _getPageRoute(thisSettings.name!, UserProfile());
+    //case BuRouts.BUserProfileUpdate:
+    // return _getPageRoute(thisSettings.name!, ProfileUserUpdateForm());
     default:
       return MaterialPageRoute(
           builder: (_) => Scaffold(

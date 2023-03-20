@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:boatusers/components/profileUserUpdateForm.dart';
 import 'package:boatusers/components/userProfileModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -28,16 +29,41 @@ class APIUserProfileFuncs {
     }
   }
 
-  static Future<List<UserProfileModel>> updateUser(
-      thisId, thisUserName, thisPassword) async {
-    List thisUpadteList = List.empty(growable: true);
-    Map<String, dynamic> body = {
-      'buName': '$thisUserName',
-      'buPassword': '$thisPassword',
-    };
+  static Future<List<UserProfileModel>> getUser(thisId) async {
+    //172.17.0.1
+    //10.0.2.2
+    //change the Url approprately
     var httpUrl = kIsWeb
-        ? 'http://172.17.0.1:3000/api/updateData?thisId=$thisId'
-        : 'http://10.0.2.2:3000/api/updateData?thisId=$thisId';
+        ? 'http://172.17.0.1:3000/api/getIdData?thisId=$thisId'
+        : 'http://10.0.2.2:3000/api/getIdData?thisId=$thisId';
+    final response = await http.get(Uri.parse(httpUrl), headers: {
+      "Accept": "application/json",
+      "Access-Control-Allow_Origin": "*"
+    });
+    print(jsonDecode(response.body)['msg']);
+    if (response.statusCode == 200) {
+      List thisResponse = jsonDecode(response.body)['msg'];
+      return thisResponse
+          .map((value) => UserProfileModel.fromJson(value))
+          .toList();
+    } else {
+      throw Exception('Error from GetId data');
+    }
+  }
+
+  static Future<List<UserProfileModel>> updateUser(
+      thisId, thisUserName, thisUserpassword) async {
+    print('UpdateUserCalled $thisId');
+    List thisUpadteList = List.empty(growable: true);
+    Map<String, String> body = {
+      'buId': '$thisId',
+      'buName': '$thisUserName',
+      'buPassword': '$thisUserpassword',
+    };
+
+    var httpUrl = kIsWeb
+        ? 'http://172.17.0.1:3000/api/updateData'
+        : 'http://10.0.2.2:3000/api/updateData';
     final response = await http.put(Uri.parse(httpUrl),
         headers: {
           "Accept": "application/json",
@@ -77,16 +103,24 @@ class APIUserProfileFuncs {
   }
 
   static onDeleteClick(thisName) {
-    print('clicked Main Card $thisName');
+    print('clicked Delete Card $thisName');
     deleteUser(thisName);
   }
 
-  static onUpdateClick(thisId) {
-    print('clicked Main Card $thisId');
-    updateUser(thisId, 'testUpdate56', '985471');
+  static onUpdateClick(thisId, thisName, thisPassword, BuildContext context) {
+    print('clicked Update Card $thisId');
+    //updateUser(thisId, 'testUpdate56', '985471');
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ProfileUserUpdateForm(),
+        settings: RouteSettings(arguments: {
+          'buId': thisId,
+          'buName': '$thisName',
+          'buPassword': '$thisPassword'
+        })));
   }
 
-  static List<Widget> buildMngData(List<UserProfileModel> posts) {
+  static List<Widget> buildMngData(
+      List<UserProfileModel> posts, BuildContext context) {
     return posts
         .map((post) =>
             //GestureDetector(
@@ -113,7 +147,11 @@ class APIUserProfileFuncs {
                     color: Colors.redAccent,
                   ),
                   IconButton(
-                    onPressed: () => onUpdateClick(post.id.toString()),
+                    onPressed: () => onUpdateClick(
+                        post.id.toString(),
+                        post.buName.toString(),
+                        post.buPassword.toString(),
+                        context),
                     icon: const Icon(Icons.update),
                     color: Colors.blueAccent,
                   ),

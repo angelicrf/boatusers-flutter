@@ -5,4 +5,5 @@ abstract class BuRouts {
   static const String BUFavorites = 'Favorites';
   static const String BUItems = 'BoatItems';
   static const String BUserProfile = 'UserProfile';
+  static const String BUserProfileUpdate = 'ProfileUserUpdateForm';
 }

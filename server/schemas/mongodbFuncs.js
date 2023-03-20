@@ -87,10 +87,23 @@ const mnDbById = (thisName) => {
     }
   })
 }
+const mnDbByIdData = (thisId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let doc = await UserSchema.findById(thisId)
+      if (doc._id !== null) {
+        resolve(doc)
+      }
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
 module.exports = {
   mnDbInsert,
   mnDbDelete,
   mnDbUpdate,
   mnDbGet,
   mnDbById,
+  mnDbByIdData,
 }

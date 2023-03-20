@@ -13,6 +13,7 @@ const {
   mnDbUpdate,
   mnDbDelete,
   mnDbById,
+  mnDbByIdData,
 } = require('./schemas/mongodbFuncs')
 require('dotenv').config({ path: './.env' })
 
@@ -55,6 +56,14 @@ app.get('/api/getId', async (req, res) => {
     return res.status(400).json({ msg: 'mndbGetById Error' })
   }
 })
+app.get('/api/getIdData', async (req, res) => {
+  let getResult = await mnDbByIdData(req.query.thisId)
+  if (getResult.err == null) {
+    return res.status(200).json({ msg: getResult })
+  } else {
+    return res.status(400).json({ msg: 'mndbGetByIdData Error' })
+  }
+})
 app.delete('/api/deleteData', async (req, res) => {
   let getReq = req.query.buName
   console.log(getReq)
@@ -69,7 +78,13 @@ app.delete('/api/deleteData', async (req, res) => {
   }
 })
 app.put('/api/updateData', async (req, res) => {
-  let result = await mnDbUpdate(req.query.thisId, req.body)
+  console.log('PutFuncFromServer')
+  let obj = Object.assign({
+    buName: req.body.buName,
+    buPassword: req.body.buPassword,
+  })
+  console.log(obj)
+  let result = await mnDbUpdate(req.body.buId, obj)
   if (result.err == null) {
     return res.json({ msg: result })
   } else {
