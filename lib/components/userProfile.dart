@@ -36,19 +36,28 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('User Profile'), actions: [
-          SearchWidget.searchTextField(searchController),
-          IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                print(searchController.text);
-              })
-        ]),
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+            title: SizedBox(
+              child: Text(
+                'Profile',
+                style: TextStyle(fontSize: 12.0),
+              ),
+              width: 50.0,
+            ),
+            actions: [
+              SearchWidget.searchTextField(searchController),
+              IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    print(searchController.text);
+                  })
+            ]),
         body: Column(
           children: [
             Container(
               padding: const EdgeInsets.all(8.0),
-              height: 144.0,
+              height: 80.0,
               child: Text('User Profile Page'),
             ),
             userProfileForm(
@@ -90,77 +99,93 @@ Widget userProfileForm(
   return Form(
     key: _formKey,
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        TextFormField(
-          controller: formController,
-          decoration: const InputDecoration(
-            enabledBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromARGB(255, 138, 47, 47))),
-            focusedBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromARGB(255, 47, 20, 146))),
-            hintText: 'Enter User Name',
-            contentPadding: EdgeInsets.all(2.2),
-            hintStyle: TextStyle(
-              color: Color.fromARGB(153, 136, 17, 17),
-              fontSize: 20,
+        SizedBox(
+            width: MediaQuery.of(context).size.width - 50,
+            child: TextFormField(
+              controller: formController,
+              decoration: const InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 138, 47, 47))),
+                focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 47, 20, 146))),
+                hintText: 'Enter User Name',
+                labelText: 'User Name',
+                contentPadding: EdgeInsets.all(18),
+                hintStyle: TextStyle(
+                  color: Color.fromARGB(153, 136, 17, 17),
+                  fontSize: 20,
+                ),
+              ),
+              // The validator receives the text that the user has entered.
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your username';
+                }
+                return null;
+              },
+            )),
+        SizedBox(
+          height: 16,
+        ),
+        SizedBox(
+            width: MediaQuery.of(context).size.width - 50,
+            child: TextFormField(
+              controller: passwordController,
+              decoration: const InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 138, 47, 47))),
+                focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromRGBO(47, 20, 146, 1))),
+                hintText: 'Enter Password',
+                labelText: 'Password',
+                contentPadding: EdgeInsets.all(18),
+                hintStyle: TextStyle(
+                  color: Color.fromARGB(153, 136, 17, 17),
+                  fontSize: 20,
+                ),
+              ),
+              // The validator receives the text that the user has entered.
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your password';
+                }
+                return null;
+              },
+            )),
+        Row(
+          children: <Widget>[
+            SizedBox(width: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Processing Data')),
+                    );
+                    thisState();
+                  }
+                },
+                child: const Text('Submit'),
+              ),
             ),
-          ),
-          // The validator receives the text that the user has entered.
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your username';
-            }
-            return null;
-          },
+            SizedBox(width: 16),
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: FloatingActionButton(
+                    backgroundColor: Colors.green,
+                    child: Icon(Icons.data_array),
+                    onPressed: () {
+                      thisBoolState();
+                    }))
+          ],
         ),
-        TextFormField(
-          controller: passwordController,
-          decoration: const InputDecoration(
-            enabledBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Color.fromARGB(255, 138, 47, 47))),
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color.fromRGBO(47, 20, 146, 1))),
-            hintText: 'Enter Password',
-            contentPadding: EdgeInsets.all(2.2),
-            hintStyle: TextStyle(
-              color: Color.fromARGB(153, 136, 17, 17),
-              fontSize: 20,
-            ),
-          ),
-          // The validator receives the text that the user has entered.
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your password';
-            }
-            return null;
-          },
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Processing Data')),
-                );
-                thisState();
-              }
-            },
-            child: const Text('Submit'),
-          ),
-        ),
-        Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: FloatingActionButton(
-                backgroundColor: Colors.green,
-                child: Icon(Icons.data_array),
-                onPressed: () {
-                  thisBoolState();
-                })),
       ],
     ),
   );
@@ -195,6 +220,7 @@ Widget mngDbPostDataDisplay(
     void Function() thisState,
     BuildContext context) {
   if (isMngdbPost) {
+    print('postData');
     thisState();
     return Expanded(
         child: FutureBuilder<List<UserProfileModel>>(

@@ -161,6 +161,7 @@ class _BUHomePageState extends State<BUHomePage> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(widget.buTitle),
         key: (widget.key),
