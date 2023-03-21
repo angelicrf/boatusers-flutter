@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../Models/productModel.dart';
+
 class BoatItems extends StatefulWidget {
   const BoatItems({Key? key}) : super(key: key);
 
@@ -12,6 +14,7 @@ class BoatItems extends StatefulWidget {
 
 class _BoatItemsState extends State<BoatItems> {
   final searchController = TextEditingController();
+  final dataEntries = ProductModel.itemsData();
 
   @override
   void dispose() {
@@ -42,10 +45,67 @@ class _BoatItemsState extends State<BoatItems> {
                     }))
           ],
         ),
-        body: Container(
-          padding: const EdgeInsets.all(8.0),
-          height: 144.0,
-          child: const Text('Boat Items Page'),
+        body: Padding(
+          padding: EdgeInsets.all(12.0),
+          child: displayCatalog(context, dataEntries),
         ));
+  }
+
+  Widget displayCatalog(BuildContext context, List<ProductModel> dataEntries) {
+    return GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+        ),
+        itemCount: dataEntries.length,
+        itemBuilder: (context, index) => Card(
+            child: Container(
+                height: 290,
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                margin: EdgeInsets.all(5),
+                padding: EdgeInsets.all(5),
+                child: Stack(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: Image.network(
+                            'https://tech.pelmorex.com/wp-content/uploads/2020/10/flutter.png',
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        Text(
+                          'Item: ' + dataEntries[index].buItemName,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Price: ' + dataEntries[index].buPrice,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.deepOrange,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              dataEntries[index].buDescription,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                ))));
   }
 }
