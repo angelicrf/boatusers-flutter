@@ -34,3 +34,21 @@ flutter build apk --debug --verbose
 
 cd android
 ./gradlew assembleDebug --stacktrace
+
+Running Server and Client;
+
+cd server => npm run dev-device
+
+Http Url is always http:10.0.2.2:3000
+
+# Web Implementation
+
+Running Server and Client :
+
+cd to server => npm run dev-web
+
+Http Url is your ip address:
+
+Run ifconfig in linux and ipconfig in windows to get your machine IP address
+
+Example of a Machine IP is 172.17.0.1:3000
