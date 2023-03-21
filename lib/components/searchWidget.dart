@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -6,7 +7,7 @@ class SearchWidget {
     return Flexible(
         child: SizedBox(
             //constraints: const BoxConstraints(maxWidth: 500),
-            width: 200.0,
+            width: kIsWeb ? 500.0 : 120.0,
             child: TextField(
               controller: searchController,
               autofocus: true,

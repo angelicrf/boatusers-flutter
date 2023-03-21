@@ -2,6 +2,7 @@ import 'package:boatusers/components/apiUserProfileFuncs.dart';
 import 'package:boatusers/components/searchWidget.dart';
 import 'package:boatusers/components/userProfileModel.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class UserProfile extends StatefulWidget {
@@ -38,27 +39,31 @@ class _UserProfileState extends State<UserProfile> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-            title: SizedBox(
-              child: Text(
-                'Profile',
-                style: TextStyle(fontSize: 12.0),
+          title: const SizedBox(
+            width: kIsWeb ? 220.0 : 50.0,
+            child: Text(
+              kIsWeb ? 'User Profile' : 'Profile',
+              style: TextStyle(
+                fontSize: kIsWeb ? 18.0 : 12.0,
               ),
-              width: 50.0,
             ),
-            actions: [
-              SearchWidget.searchTextField(searchController),
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    print(searchController.text);
-                  })
-            ]),
+          ),
+          actions: [
+            SearchWidget.searchTextField(searchController),
+            SizedBox(
+                child: IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {
+                      print(searchController.text);
+                    }))
+          ],
+        ),
         body: Column(
           children: [
             Container(
               padding: const EdgeInsets.all(8.0),
               height: 80.0,
-              child: Text('User Profile Page'),
+              child: const Text('User Profile Page'),
             ),
             userProfileForm(
                 _formKey,
@@ -128,7 +133,7 @@ Widget userProfileForm(
                 return null;
               },
             )),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         SizedBox(
@@ -160,7 +165,7 @@ Widget userProfileForm(
             )),
         Row(
           children: <Widget>[
-            SizedBox(width: 30),
+            const SizedBox(width: 30),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
@@ -175,12 +180,12 @@ Widget userProfileForm(
                 child: const Text('Submit'),
               ),
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: FloatingActionButton(
                     backgroundColor: Colors.green,
-                    child: Icon(Icons.data_array),
+                    child: const Icon(Icons.data_array),
                     onPressed: () {
                       thisBoolState();
                     }))
@@ -237,6 +242,7 @@ Widget mngDbPostDataDisplay(
         }
       },
     ));
-  } else
+  } else {
     return const SizedBox.shrink();
+  }
 }

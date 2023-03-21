@@ -14,9 +14,9 @@ class StoreCMainWidgets {
           converter: (store) => store.state.postsState.isLoading,
           builder: (context, isLoading) {
             if (isLoading) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else {
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }
           },
         ),
@@ -25,9 +25,9 @@ class StoreCMainWidgets {
           converter: (store) => store.state.postsState.isError,
           builder: (context, isError) {
             if (isError) {
-              return Text("Failed to get posts");
+              return const Text("Failed to get posts");
             } else {
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }
           },
         ),
@@ -40,7 +40,7 @@ class StoreCMainWidgets {
             if (posts.isNotEmpty) {
               return ListView(children: _buildPosts(posts));
             } else {
-              return Text('No Data');
+              return const Text('No Data');
             }
           },
         ))

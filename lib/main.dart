@@ -14,6 +14,7 @@ import 'package:boatusers/src/models/post.dart';
 import 'package:boatusers/src/redux/posts/post_action.dart';
 import 'package:http/http.dart' as http;
 import 'package:redux_persist_flutter/redux_persist_flutter.dart';
+import 'components/searchWidget.dart';
 import 'components/storeCMainWidgets.dart';
 import 'src/redux/store.dart';
 
@@ -32,8 +33,8 @@ class BoatUsersApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Boat Users',
           theme: ThemeData(
-            primarySwatch: Colors.cyan,
-          ),
+              primarySwatch: Colors.cyan,
+              scaffoldBackgroundColor: Color.fromARGB(255, 224, 248, 242)),
           debugShowCheckedModeBanner: false,
           onGenerateRoute: handleRoutes,
           home: BUHomePage('Boat Users App', UniqueKey()),
@@ -58,6 +59,7 @@ class _BUHomePageState extends State<BUHomePage> {
   late List<Widget> stCWidgets;
   final buserNameController = TextEditingController();
   final buPasswordController = TextEditingController();
+  final searchController = TextEditingController();
 
   @override
   void initState() {
@@ -66,12 +68,8 @@ class _BUHomePageState extends State<BUHomePage> {
   }
 
   @override
-  void didChangeDependencies() {
-    print('stateupdated $_buCount');
-  }
-
-  @override
   void dispose() {
+    searchController.dispose();
     buPasswordController.dispose();
     buserNameController.dispose();
     super.dispose();
@@ -119,7 +117,7 @@ class _BUHomePageState extends State<BUHomePage> {
       showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
+          return const AlertDialog(
             content: Text('Empty Password Field!'),
           );
         },
@@ -129,7 +127,7 @@ class _BUHomePageState extends State<BUHomePage> {
       showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
+          return const AlertDialog(
             content: Text('Empty User Name Field!'),
           );
         },
@@ -138,7 +136,7 @@ class _BUHomePageState extends State<BUHomePage> {
       showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
+          return const AlertDialog(
             content: Text('Invalid Entry!'),
           );
         },
@@ -163,8 +161,24 @@ class _BUHomePageState extends State<BUHomePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(widget.buTitle),
-        key: (widget.key),
+        title: SizedBox(
+          width: kIsWeb ? 220.0 : 50.0,
+          child: Text(
+            kIsWeb ? widget.buTitle : 'Home',
+            style: const TextStyle(
+              fontSize: kIsWeb ? 18.0 : 12.0,
+            ),
+          ),
+        ),
+        actions: [
+          SearchWidget.searchTextField(searchController),
+          SizedBox(
+              child: IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    print(searchController.text);
+                  }))
+        ],
       ),
       body: Center(
         child: Column(
@@ -184,7 +198,7 @@ class _BUHomePageState extends State<BUHomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: kIsWeb ? FooterWeb() : SizedBox.shrink(),
+      bottomNavigationBar: kIsWeb ? FooterWeb() : const SizedBox.shrink(),
     );
   }
 }

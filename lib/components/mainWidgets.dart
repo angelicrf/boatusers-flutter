@@ -20,10 +20,10 @@ class MainWidgets {
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: TextField(
             controller: buserNameController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Enter User Name',
             ),
@@ -38,17 +38,17 @@ class MainWidgets {
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: TextField(
             controller: buPasswordController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Enter Password',
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: FloatingActionButton(
             onPressed: _SubmitInputs,
             tooltip: 'Enter',
@@ -58,7 +58,7 @@ class MainWidgets {
           //,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: FloatingActionButton(
             onPressed: _onFetchPostsPressed,
             heroTag: null,

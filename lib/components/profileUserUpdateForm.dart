@@ -61,71 +61,103 @@ class _ProfileUserUpdateFormState extends State<ProfileUserUpdateForm> {
     return Form(
       key: _formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'User Name',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              )),
-          TextFormField(
-              controller: formController,
-              decoration: const InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color.fromARGB(255, 138, 47, 47))),
-                focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Color.fromARGB(255, 47, 20, 146))),
-                hintText: 'Enter User Name',
-                contentPadding: EdgeInsets.all(8.0),
-                hintStyle: TextStyle(
-                  color: Color.fromARGB(153, 136, 17, 17),
-                  fontSize: 20,
-                ),
-              )),
-          const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Password',
-                style: TextStyle(fontSize: 20),
-              )),
-          TextFormField(
-            controller: passwordController,
-            decoration: const InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Color.fromARGB(255, 138, 47, 47))),
-              focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Color.fromRGBO(47, 20, 146, 1))),
-              hintText: 'Enter Password',
-              contentPadding: EdgeInsets.all(8.0),
-              hintStyle: TextStyle(
-                color: Color.fromARGB(153, 136, 17, 17),
-                fontSize: 20,
-              ),
+          mainAxisAlignment:
+              kIsWeb ? MainAxisAlignment.start : MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'User Name',
+                  style: TextStyle(
+                    fontSize: kIsWeb ? 20.0 : 15.0,
+                  ),
+                )),
+            SizedBox(
+                width: MediaQuery.of(context).size.width - 50,
+                child: TextFormField(
+                    controller: formController,
+                    decoration: const InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromARGB(255, 138, 47, 47))),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromARGB(255, 47, 20, 146))),
+                      hintText: 'Enter User Name',
+                      contentPadding: EdgeInsets.all(8.0),
+                      hintStyle: TextStyle(
+                        color: Color.fromARGB(153, 136, 17, 17),
+                        fontSize: kIsWeb ? 20.0 : 12.0,
+                      ),
+                    ))),
+            const SizedBox(
+              height: 20.0,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
-              onPressed: () async {
-                await APIUserProfileFuncs.updateUser(
-                    thisUserId, formController.text, passwordController.text);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserProfile()),
-                );
-              },
-              child: const Text('Update'),
+            const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Password',
+                  style: TextStyle(fontSize: kIsWeb ? 20 : 15.0),
+                )),
+            SizedBox(
+                width: MediaQuery.of(context).size.width - 50,
+                child: TextFormField(
+                  controller: passwordController,
+                  decoration: const InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Color.fromARGB(255, 138, 47, 47))),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromRGBO(47, 20, 146, 1))),
+                    hintText: 'Enter Password',
+                    contentPadding: EdgeInsets.all(8.0),
+                    hintStyle: TextStyle(
+                      color: Color.fromARGB(153, 136, 17, 17),
+                      fontSize: kIsWeb ? 20 : 12.0,
+                    ),
+                  ),
+                )),
+            const SizedBox(
+              height: 20.0,
             ),
-          ),
-        ],
-      ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                FloatingActionButton(
+                  backgroundColor: Color.fromARGB(255, 177, 42, 60),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const UserProfile()),
+                    );
+                  },
+                  child: const Icon(Icons.arrow_back),
+                ),
+                const SizedBox(
+                  width: 25.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await APIUserProfileFuncs.updateUser(thisUserId,
+                          formController.text, passwordController.text);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const UserProfile()),
+                      );
+                    },
+                    child: const Text('Update'),
+                  ),
+                ),
+              ],
+            )
+          ]),
     );
   }
 }

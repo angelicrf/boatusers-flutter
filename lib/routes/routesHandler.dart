@@ -14,14 +14,14 @@ Route<dynamic> handleRoutes(RouteSettings thisSettings) {
     case BuRouts.BUFavorites:
       return _getPageRoute(thisSettings.name!, Favorites());
     case BuRouts.BUItems:
-      return _getPageRoute(thisSettings.name!, BoatItems());
+      return _getPageRoute(thisSettings.name!, const BoatItems());
     case BuRouts.BUserProfile:
-      return _getPageRoute(thisSettings.name!, UserProfile());
+      return _getPageRoute(thisSettings.name!, const UserProfile());
     //case BuRouts.BUserProfileUpdate:
     // return _getPageRoute(thisSettings.name!, ProfileUserUpdateForm());
     default:
       return MaterialPageRoute(
-          builder: (_) => Scaffold(
+          builder: (_) => const Scaffold(
                 body: Text(''),
               ));
   }
