@@ -16,6 +16,8 @@ class BoatItems extends StatefulWidget {
 class _BoatItemsState extends State<BoatItems> {
   final searchController = TextEditingController();
   final dataEntries = ProductModel.itemsData();
+  bool isSelectedColor = false;
+  int thisClickedId = 0;
 
   @override
   void dispose() {
@@ -61,67 +63,111 @@ class _BoatItemsState extends State<BoatItems> {
         ),
         itemCount: dataEntries.length,
         itemBuilder: (context, index) => Card(
-            child: Container(
-                height: 290,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                margin: const EdgeInsets.all(5),
-                padding: const EdgeInsets.all(5),
-                child: Stack(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: Image.network(
-                            //'https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-                            dataEntries[index].buItemImages[0],
-                            width: 60,
-                            height: 40,
-                            errorBuilder: (BuildContext context,
-                                Object exception, StackTrace? stackTrace) {
-                              return Text(
-                                  'not displayed ${exception.toString()}');
+                child: Container(
+              width: 400,
+              //height: 290,
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
+              margin: const EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
+              child:
+                  //Stack(
+                  //children: [
+                  Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: isSelectedColor &&
+                            dataEntries[index].buItemId == thisClickedId
+                        ? ShaderMask(
+                            shaderCallback: (bounds) {
+                              return const RadialGradient(colors: [
+                                Colors.blue,
+                                Colors.green,
+                                Colors.grey
+                              ]).createShader(bounds);
                             },
-                          ),
-                        ),
-                        Text(
-                          'Item: ${dataEntries[index].buItemName}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'Price: ${dataEntries[index].buPrice}',
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.deepOrange,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        ItemColorComponent().itemsColors(
-                            context, dataEntries[index].buItemColors),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              dataEntries[index].buDescription,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
+                            blendMode: BlendMode.colorBurn,
+                            child: Image.network(
+                              //'https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+                              dataEntries[index].buItemImages[0],
+                              width: 420,
+                              height: 340,
+                              errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
+                                return Text(
+                                    'not displayed ${exception.toString()}');
+                              },
                             ),
-                          ],
-                        )
-                      ],
+                          )
+                        //Text('isSelected ${dataEntries[index].buItemId}')
+
+                        : isSelectedColor &&
+                                dataEntries[index].buItemId != thisClickedId
+                            ? Image.network(
+                                dataEntries[index].buItemImages[0],
+                                width: 60,
+                                height: 40,
+                                errorBuilder: (BuildContext context,
+                                    Object exception, StackTrace? stackTrace) {
+                                  return Text(
+                                      'not displayed ${exception.toString()}');
+                                },
+                              )
+                            //Text('notSelected ${dataEntries[index].buItemId}')
+                            : Image.network(
+                                dataEntries[index].buItemImages[0],
+                                width: 420,
+                                height: 340,
+                                errorBuilder: (BuildContext context,
+                                    Object exception, StackTrace? stackTrace) {
+                                  return Text(
+                                      'not displayed ${exception.toString()}');
+                                },
+                              ),
+                  ),
+                  Text(
+                    'Item: ${dataEntries[index].buItemName}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ))));
+                  ),
+                  Text(
+                    'Price: ${dataEntries[index].buPrice}',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.deepOrange,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  ItemColorComponent().itemsColors(
+                      context,
+                      dataEntries[index].buItemColors,
+                      () => setState(() {
+                            print(dataEntries[index].buItemId);
+                            thisClickedId = dataEntries[index].buItemId;
+                            isSelectedColor = true;
+                          })),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        dataEntries[index].buDescription,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            )));
   }
 }

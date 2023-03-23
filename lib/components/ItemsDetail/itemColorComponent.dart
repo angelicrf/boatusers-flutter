@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ItemColorComponent {
-  Widget itemsColors(BuildContext context, List<Color> itemColors) {
+  Widget itemsColors(BuildContext context, List<Color> itemColors,
+      void Function() colorPressed) {
     var listItems = <Widget>[
       const Padding(
           padding: EdgeInsets.only(top: 12.0),
@@ -27,9 +28,10 @@ class ItemColorComponent {
                 color: element,
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.black, width: 3.0)),
-            child: const Icon(
-              Icons.abc,
+            child: IconButton(
+              icon: const Icon(Icons.abc),
               color: Colors.black,
+              onPressed: () => colorPressed(),
             ),
           ),
           const SizedBox(
