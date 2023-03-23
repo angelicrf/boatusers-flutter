@@ -1,6 +1,6 @@
 import 'package:boatusers/components/apiUserProfileFuncs.dart';
 import 'package:boatusers/components/searchWidget.dart';
-import 'package:boatusers/components/userProfileModel.dart';
+import 'package:boatusers/Models/userProfileModel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

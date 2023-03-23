@@ -1,3 +1,4 @@
+import 'package:boatusers/components/ItemsDetail/itemColorComponent.dart';
 import 'package:boatusers/components/searchWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -46,7 +47,7 @@ class _BoatItemsState extends State<BoatItems> {
           ],
         ),
         body: Padding(
-          padding: EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(12.0),
           child: displayCatalog(context, dataEntries),
         ));
   }
@@ -64,8 +65,8 @@ class _BoatItemsState extends State<BoatItems> {
                 height: 290,
                 decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                margin: EdgeInsets.all(5),
-                padding: EdgeInsets.all(5),
+                margin: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 child: Stack(
                   children: [
                     Column(
@@ -73,30 +74,45 @@ class _BoatItemsState extends State<BoatItems> {
                       children: [
                         Expanded(
                           child: Image.network(
-                            'https://tech.pelmorex.com/wp-content/uploads/2020/10/flutter.png',
-                            fit: BoxFit.fill,
+                            //'https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+                            dataEntries[index].buItemImages[0],
+                            width: 60,
+                            height: 40,
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              return Text(
+                                  'not displayed ${exception.toString()}');
+                            },
                           ),
                         ),
                         Text(
-                          'Item: ' + dataEntries[index].buItemName,
-                          style: TextStyle(
+                          'Item: ${dataEntries[index].buItemName}',
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          'Price: ' + dataEntries[index].buPrice,
-                          style: TextStyle(
+                          'Price: ${dataEntries[index].buPrice}',
+                          style: const TextStyle(
                             fontSize: 15,
                             color: Colors.deepOrange,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        ItemColorComponent().itemsColors(
+                            context, dataEntries[index].buItemColors),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
                         Row(
                           children: [
                             Text(
                               dataEntries[index].buDescription,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
                               ),

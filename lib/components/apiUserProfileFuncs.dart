@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:boatusers/components/profileUserUpdateForm.dart';
-import 'package:boatusers/components/userProfileModel.dart';
+import 'package:boatusers/Models/userProfileModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';

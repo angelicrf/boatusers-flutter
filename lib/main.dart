@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io' show Platform;
 import 'package:boatusers/components/about.dart';
 import 'package:boatusers/components/footerMb.dart';
 import 'package:boatusers/components/footerWeb.dart';
 import 'package:boatusers/components/mainWidgets.dart';
 import 'package:boatusers/routes/routesHandler.dart';
 import 'package:boatusers/src/redux/posts/post_state.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -25,20 +27,32 @@ void main() async {
 
 class BoatUsersApp extends StatelessWidget {
   const BoatUsersApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     print('firstClassCalled');
     return StoreProvider<StoreState>(
         store: Redux.store,
-        child: MaterialApp(
-          title: 'Boat Users',
-          theme: ThemeData(
-              primarySwatch: Colors.cyan,
-              scaffoldBackgroundColor: Color.fromARGB(255, 224, 248, 242)),
-          debugShowCheckedModeBanner: false,
-          onGenerateRoute: handleRoutes,
-          home: BUHomePage('Boat Users App', UniqueKey()),
-        ));
+        child: kIsWeb || Platform.isAndroid
+            ? MaterialApp(
+                title: 'Boat Users',
+                theme: ThemeData(
+                    primarySwatch: Colors.cyan,
+                    scaffoldBackgroundColor:
+                        Color.fromARGB(255, 224, 248, 242)),
+                debugShowCheckedModeBanner: false,
+                onGenerateRoute: handleRoutes,
+                home: BUHomePage('Boat Users App', UniqueKey()),
+              )
+            : CupertinoApp(
+                title: 'Boat Users',
+                theme: const CupertinoThemeData(
+                  primaryColor: Colors.cyan,
+                  scaffoldBackgroundColor: Color.fromARGB(255, 224, 248, 242),
+                ),
+                onGenerateRoute: handleRoutes,
+                home: BUHomePage('Boat Users App', UniqueKey()),
+              ));
   }
 }
 
@@ -146,6 +160,7 @@ class _BUHomePageState extends State<BUHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    //bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
     stCWidgets = StoreCMainWidgets(context).storeConnectorW();
     mWidgets = MainWidgets().thisW(context, buserNameController,
         buPasswordController, _buCount, _SubmitInputs, _onFetchPostsPressed);
