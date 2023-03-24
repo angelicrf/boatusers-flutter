@@ -16,6 +16,7 @@ import 'package:boatusers/src/models/post.dart';
 import 'package:boatusers/src/redux/posts/post_action.dart';
 import 'package:http/http.dart' as http;
 import 'package:redux_persist_flutter/redux_persist_flutter.dart';
+import 'package:upgrader/upgrader.dart';
 import 'components/searchWidget.dart';
 import 'components/storeCMainWidgets.dart';
 import 'src/redux/store.dart';
@@ -75,8 +76,11 @@ class BoatUsersApp extends StatelessWidget {
                         Color.fromARGB(255, 224, 248, 242)),
                 debugShowCheckedModeBanner: false,
                 onGenerateRoute: handleRoutes,
-                home: BUHomePage('Boat Users App', UniqueKey()),
-              )
+                home: UpgradeAlert(
+                    child: Scaffold(
+                  appBar: AppBar(title: Text('Upgrader Example')),
+                  body: BUHomePage('Boat Users App', UniqueKey()),
+                )))
             : CupertinoApp(
                 title: 'Boat Users',
                 theme: const CupertinoThemeData(
