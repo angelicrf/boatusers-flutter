@@ -1,4 +1,5 @@
-import 'package:boatusers/components/ItemsDetail/itemColorComponent.dart';
+import 'package:boatusers/components/ItemsDetail/itemColorComponent.dart'
+    as globals;
 import 'package:boatusers/components/searchWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -62,10 +63,10 @@ class _BoatItemsState extends State<BoatItems> {
           crossAxisSpacing: 10,
         ),
         itemCount: dataEntries.length,
+        physics: const ScrollPhysics(),
         itemBuilder: (context, index) => Card(
                 child: Container(
               width: 400,
-              //height: 290,
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(20)),
               margin: const EdgeInsets.all(5),
@@ -81,9 +82,15 @@ class _BoatItemsState extends State<BoatItems> {
                             dataEntries[index].buItemId == thisClickedId
                         ? ShaderMask(
                             shaderCallback: (bounds) {
-                              return const RadialGradient(colors: [
-                                Colors.blue,
-                                Colors.green,
+                              return RadialGradient(colors: [
+                                globals.ItemColorComponent.thisColor ==
+                                        Colors.black
+                                    ? Colors.blue
+                                    : globals.ItemColorComponent.thisColor,
+                                globals.ItemColorComponent.thisColor ==
+                                        Colors.black
+                                    ? Colors.green
+                                    : globals.ItemColorComponent.thisColor,
                                 Colors.grey
                               ]).createShader(bounds);
                             },
@@ -126,6 +133,7 @@ class _BoatItemsState extends State<BoatItems> {
                                 },
                               ),
                   ),
+                  Text(globals.ItemColorComponent.thisColor.value.toString()),
                   Text(
                     'Item: ${dataEntries[index].buItemName}',
                     style: const TextStyle(
@@ -144,7 +152,7 @@ class _BoatItemsState extends State<BoatItems> {
                   const SizedBox(
                     height: 20.0,
                   ),
-                  ItemColorComponent().itemsColors(
+                  globals.ItemColorComponent().itemsColors(
                       context,
                       dataEntries[index].buItemColors,
                       () => setState(() {

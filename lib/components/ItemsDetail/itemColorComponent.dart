@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ItemColorComponent {
+  static Color thisColor = Colors.black;
   Widget itemsColors(BuildContext context, List<Color> itemColors,
       void Function() colorPressed) {
     var listItems = <Widget>[
@@ -31,7 +32,12 @@ class ItemColorComponent {
             child: IconButton(
               icon: const Icon(Icons.abc),
               color: Colors.black,
-              onPressed: () => colorPressed(),
+              onPressed: () => {
+                print(thisColor.value.toString()),
+                thisColor = element,
+                colorPressed(),
+                print(thisColor.value)
+              },
             ),
           ),
           const SizedBox(
