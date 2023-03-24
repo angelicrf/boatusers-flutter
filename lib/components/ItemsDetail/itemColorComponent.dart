@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ItemColorComponent {
@@ -7,12 +8,14 @@ class ItemColorComponent {
       void Function() colorPressed) {
     var listItems = <Widget>[
       const Padding(
-          padding: EdgeInsets.only(top: 12.0),
-          child: Text('Colors:',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-              ))),
+          padding: EdgeInsets.only(top: kIsWeb ? 12.0 : 5.0),
+          child: Padding(
+              padding: EdgeInsets.only(left: 10.0),
+              child: Text('Colors:',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  )))),
       const SizedBox(
         width: 10.0,
       )
@@ -22,15 +25,19 @@ class ItemColorComponent {
       listItems.add(Row(
         children: [
           Container(
-            width: 50.0,
+            width: kIsWeb ? 50.0 : 35.0,
             //MediaQuery.of(context).size.width / 7,
-            height: 50.0,
+            height: kIsWeb ? 50.0 : 35.0,
             decoration: BoxDecoration(
                 color: element,
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.black, width: 3.0)),
             child: IconButton(
-              icon: const Icon(Icons.abc),
+              padding: EdgeInsets.zero,
+              icon: Icon(
+                Icons.abc,
+                //fill: 1.0,
+              ),
               color: Colors.black,
               onPressed: () => {
                 print(thisColor.value.toString()),

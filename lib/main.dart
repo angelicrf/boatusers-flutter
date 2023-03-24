@@ -21,8 +21,41 @@ import 'components/storeCMainWidgets.dart';
 import 'src/redux/store.dart';
 
 void main() async {
-  runApp(const BoatUsersApp());
+  final runnableApp = _buildRunnableApp(
+    isWeb: kIsWeb,
+    webAppWidth: 720.0,
+    app: const BoatUsersApp(),
+  );
+  runApp(runnableApp);
   Redux();
+}
+
+Widget _buildRunnableApp({
+  required bool isWeb,
+  required double webAppWidth,
+  required Widget app,
+}) {
+  if (!isWeb) {
+    return app;
+  }
+
+  return Center(
+    child: ClipRect(
+      child: Container(
+        constraints: const BoxConstraints(
+          minWidth: 720.0,
+          maxWidth: 1200.0,
+        ),
+        child: Container(
+          constraints: const BoxConstraints(
+            minWidth: 700.0,
+            maxWidth: 1000.0,
+          ),
+          child: app,
+        ),
+      ),
+    ),
+  );
 }
 
 class BoatUsersApp extends StatelessWidget {

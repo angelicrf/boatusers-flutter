@@ -29,6 +29,7 @@ class _BoatItemsState extends State<BoatItems> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const SizedBox(
             width: kIsWeb ? 220.0 : 50.0,
@@ -49,32 +50,38 @@ class _BoatItemsState extends State<BoatItems> {
                     }))
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: displayCatalog(context, dataEntries),
-        ));
+        body:
+            //Row(children: <Widget>[
+            // Flexible(
+            //child:
+            displayCatalog(context, dataEntries));
+    //]));
   }
 
   Widget displayCatalog(BuildContext context, List<ProductModel> dataEntries) {
     return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+          crossAxisCount: kIsWeb ? 2 : 1,
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
+          //childAspectRatio: MediaQuery.of(context).size.width /
+          //(MediaQuery.of(context).size.height / 2)
         ),
         itemCount: dataEntries.length,
+        shrinkWrap: true,
         physics: const ScrollPhysics(),
-        itemBuilder: (context, index) => Card(
+        itemBuilder: (context, index) => Center(
                 child: Container(
-              width: 400,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
-              margin: const EdgeInsets.all(5),
-              padding: const EdgeInsets.all(5),
-              child:
-                  //Stack(
-                  //children: [
-                  Column(
+              width: kIsWeb ? 350.0 : 280.0,
+              alignment: Alignment.center,
+              //clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Color.fromARGB(255, 211, 171, 171)),
+              margin: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(15.0),
+              child: Card(
+                  child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
@@ -82,7 +89,7 @@ class _BoatItemsState extends State<BoatItems> {
                             dataEntries[index].buItemId == thisClickedId
                         ? ShaderMask(
                             shaderCallback: (bounds) {
-                              return RadialGradient(colors: [
+                              return LinearGradient(colors: [
                                 globals.ItemColorComponent.thisColor ==
                                         Colors.black
                                     ? Colors.blue
@@ -91,41 +98,36 @@ class _BoatItemsState extends State<BoatItems> {
                                         Colors.black
                                     ? Colors.green
                                     : globals.ItemColorComponent.thisColor,
-                                Colors.grey
                               ]).createShader(bounds);
                             },
                             blendMode: BlendMode.colorBurn,
-                            child: Image.network(
-                              //'https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-                              dataEntries[index].buItemImages[0],
-                              width: 420,
-                              height: 340,
-                              errorBuilder: (BuildContext context,
-                                  Object exception, StackTrace? stackTrace) {
-                                return Text(
-                                    'not displayed ${exception.toString()}');
-                              },
-                            ),
+                            child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: Image.network(
+                                  dataEntries[index].buItemImages[0],
+                                  errorBuilder: (BuildContext context,
+                                      Object exception,
+                                      StackTrace? stackTrace) {
+                                    return Text(
+                                        'not displayed ${exception.toString()}');
+                                  },
+                                )),
                           )
-                        //Text('isSelected ${dataEntries[index].buItemId}')
-
                         : isSelectedColor &&
                                 dataEntries[index].buItemId != thisClickedId
                             ? Image.network(
                                 dataEntries[index].buItemImages[0],
-                                width: 60,
-                                height: 40,
+                                fit: BoxFit.fill,
+                                //height: 80.0,
                                 errorBuilder: (BuildContext context,
                                     Object exception, StackTrace? stackTrace) {
                                   return Text(
                                       'not displayed ${exception.toString()}');
                                 },
                               )
-                            //Text('notSelected ${dataEntries[index].buItemId}')
                             : Image.network(
                                 dataEntries[index].buItemImages[0],
-                                width: 420,
-                                height: 340,
+                                fit: BoxFit.fill,
                                 errorBuilder: (BuildContext context,
                                     Object exception, StackTrace? stackTrace) {
                                   return Text(
@@ -133,22 +135,31 @@ class _BoatItemsState extends State<BoatItems> {
                                 },
                               ),
                   ),
-                  Text(globals.ItemColorComponent.thisColor.value.toString()),
-                  Text(
-                    'Item: ${dataEntries[index].buItemName}',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  SizedBox(
+                    height: 20.0,
                   ),
-                  Text(
-                    'Price: ${dataEntries[index].buPrice}',
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: Colors.deepOrange,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Text(
+                        'Item: ${dataEntries[index].buItemName}',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                  const SizedBox(
+                    height: 10.0,
                   ),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: Text(
+                        'Price: ${dataEntries[index].buPrice} \$',
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.deepOrange,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
                   const SizedBox(
                     height: 20.0,
                   ),
@@ -160,22 +171,21 @@ class _BoatItemsState extends State<BoatItems> {
                             thisClickedId = dataEntries[index].buItemId;
                             isSelectedColor = true;
                           })),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
                   Row(
                     children: [
-                      Text(
-                        dataEntries[index].buDescription,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            dataEntries[index].buDescription,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          )),
                     ],
-                  )
+                  ),
                 ],
-              ),
+              )),
             )));
   }
 }
