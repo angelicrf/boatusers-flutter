@@ -62,10 +62,9 @@ class _BoatItemsState extends State<BoatItems> {
     return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: kIsWeb ? 2 : 1,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          //childAspectRatio: MediaQuery.of(context).size.width /
-          //(MediaQuery.of(context).size.height / 2)
+          //mainAxisSpacing: 5,
+          //crossAxisSpacing: 5,
+          mainAxisExtent: kIsWeb ? 600.0 : 450.0,
         ),
         itemCount: dataEntries.length,
         shrinkWrap: true,
@@ -74,7 +73,6 @@ class _BoatItemsState extends State<BoatItems> {
                 child: Container(
               width: kIsWeb ? 350.0 : 280.0,
               alignment: Alignment.center,
-              //clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: Color.fromARGB(255, 211, 171, 171)),
@@ -118,7 +116,6 @@ class _BoatItemsState extends State<BoatItems> {
                             ? Image.network(
                                 dataEntries[index].buItemImages[0],
                                 fit: BoxFit.fill,
-                                //height: 80.0,
                                 errorBuilder: (BuildContext context,
                                     Object exception, StackTrace? stackTrace) {
                                   return Text(
@@ -135,7 +132,7 @@ class _BoatItemsState extends State<BoatItems> {
                                 },
                               ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20.0,
                   ),
                   Padding(
