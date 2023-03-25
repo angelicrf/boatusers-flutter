@@ -61,9 +61,9 @@ class _BoatItemsState extends State<BoatItems> {
   Widget displayCatalog(BuildContext context, List<ProductModel> dataEntries) {
     return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: kIsWeb ? 2 : 1,
-          //mainAxisSpacing: 5,
-          //crossAxisSpacing: 5,
+          crossAxisCount: 2,
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 5,
           mainAxisExtent: kIsWeb ? 600.0 : 450.0,
         ),
         itemCount: dataEntries.length,
@@ -71,13 +71,12 @@ class _BoatItemsState extends State<BoatItems> {
         physics: const ScrollPhysics(),
         itemBuilder: (context, index) => Center(
                 child: Container(
-              width: kIsWeb ? 350.0 : 280.0,
+              width: kIsWeb ? 350.0 : 250.0,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(15.0),
                   color: Color.fromARGB(255, 211, 171, 171)),
-              margin: const EdgeInsets.all(20.0),
-              padding: const EdgeInsets.all(15.0),
+              padding: kIsWeb ? EdgeInsets.all(8.0) : EdgeInsets.all(3.0),
               child: Card(
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -85,7 +84,8 @@ class _BoatItemsState extends State<BoatItems> {
                   Expanded(
                     child: isSelectedColor &&
                             dataEntries[index].buItemId == thisClickedId
-                        ? ShaderMask(
+                        ?
+                        /*  ShaderMask(
                             shaderCallback: (bounds) {
                               return LinearGradient(colors: [
                                 globals.ItemColorComponent.thisColor ==
@@ -99,23 +99,32 @@ class _BoatItemsState extends State<BoatItems> {
                               ]).createShader(bounds);
                             },
                             blendMode: BlendMode.colorBurn,
-                            child: FittedBox(
-                                fit: BoxFit.fill,
-                                child: Image.network(
-                                  dataEntries[index].buItemImages[0],
-                                  errorBuilder: (BuildContext context,
-                                      Object exception,
-                                      StackTrace? stackTrace) {
-                                    return Text(
-                                        'not displayed ${exception.toString()}');
-                                  },
-                                )),
-                          )
+                         */
+                        Container(
+                            height: double.infinity,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        dataEntries[index].buItemImages[0]),
+                                    fit: BoxFit.cover,
+                                    colorFilter: ColorFilter.mode(
+                                        globals.ItemColorComponent.thisColor ==
+                                                Colors.black
+                                            ? Colors.blue
+                                            : globals
+                                                .ItemColorComponent.thisColor,
+                                        BlendMode.color))),
+                            child: const SizedBox(
+                              height: 250.0,
+                              width: 250.0,
+                            ))
                         : isSelectedColor &&
                                 dataEntries[index].buItemId != thisClickedId
                             ? Image.network(
                                 dataEntries[index].buItemImages[0],
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
                                 errorBuilder: (BuildContext context,
                                     Object exception, StackTrace? stackTrace) {
                                   return Text(
@@ -124,6 +133,7 @@ class _BoatItemsState extends State<BoatItems> {
                               )
                             : Image.network(
                                 dataEntries[index].buItemImages[0],
+                                //'https://picsum.photos/250?image=9',
                                 fit: BoxFit.fill,
                                 errorBuilder: (BuildContext context,
                                     Object exception, StackTrace? stackTrace) {
