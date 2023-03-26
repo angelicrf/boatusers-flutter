@@ -1,5 +1,6 @@
 import 'package:boatusers/components/ItemsDetail/itemColorComponent.dart'
     as globals;
+import 'package:boatusers/components/ItemsDetail/itemComponent.dart';
 import 'package:boatusers/components/searchWidget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -89,48 +90,72 @@ class _BoatItemsState extends State<BoatItems> {
                   Expanded(
                     child: isSelectedColor &&
                             dataEntries[index].buItemId == thisClickedId
-                        ? Container(
-                            height: double.infinity,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0),
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                        dataEntries[index].buItemImages[0]),
-                                    fit: BoxFit.cover,
-                                    colorFilter: ColorFilter.mode(
-                                        globals.ItemColorComponent.thisColor ==
-                                                Colors.black
-                                            ? Colors.blue
-                                            : globals
-                                                .ItemColorComponent.thisColor,
-                                        BlendMode.color))),
-                            child: const SizedBox(
-                                //height: 250.0,
-                                //width: 250.0,
-                                ))
+                        ? GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const ItemComponent(),
+                                  settings: RouteSettings(arguments: {
+                                    'buItemId': dataEntries[index].buItemId,
+                                  })));
+                            },
+                            child: Container(
+                                height: double.infinity,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                            dataEntries[index].buItemImages[0]),
+                                        fit: BoxFit.cover,
+                                        colorFilter: ColorFilter.mode(
+                                            globals.ItemColorComponent
+                                                        .thisColor ==
+                                                    Colors.black
+                                                ? Colors.blue
+                                                : globals.ItemColorComponent
+                                                    .thisColor,
+                                            BlendMode.color))),
+                                child: const SizedBox()))
                         : isSelectedColor &&
                                 dataEntries[index].buItemId != thisClickedId
-                            ? Image.network(
-                                dataEntries[index].buItemImages[0],
-                                fit: BoxFit.cover,
-                                errorBuilder: (BuildContext context,
-                                    Object exception, StackTrace? stackTrace) {
-                                  return Text(
-                                      'not displayed ${exception.toString()}');
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ItemComponent(),
+                                      settings: RouteSettings(arguments: {
+                                        'buItemId': dataEntries[index].buItemId,
+                                      })));
                                 },
-                              )
-                            : Image.network(
-                                dataEntries[index].buItemImages[0],
-                                //'https://picsum.photos/250?image=9',
-                                fit: BoxFit.cover,
-                                //height: 200.0,
-                                errorBuilder: (BuildContext context,
-                                    Object exception, StackTrace? stackTrace) {
-                                  return Text(
-                                      'not displayed ${exception.toString()}');
+                                child: Image.network(
+                                  dataEntries[index].buItemImages[0],
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (BuildContext context,
+                                      Object exception,
+                                      StackTrace? stackTrace) {
+                                    return Text(
+                                        'not displayed ${exception.toString()}');
+                                  },
+                                ))
+                            : GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ItemComponent(),
+                                      settings: RouteSettings(arguments: {
+                                        'buItemId': dataEntries[index].buItemId,
+                                      })));
                                 },
-                              ),
+                                child: Image.network(
+                                  dataEntries[index].buItemImages[0],
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (BuildContext context,
+                                      Object exception,
+                                      StackTrace? stackTrace) {
+                                    return Text(
+                                        'not displayed ${exception.toString()}');
+                                  },
+                                )),
                   ),
                   const SizedBox(
                     height: kIsWeb ? 20.0 : 5.0,

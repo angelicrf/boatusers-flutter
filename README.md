@@ -64,7 +64,7 @@ ios -> Flutter -> AppFrameworkInfo.plist
 
 Add these two lines of new key values to the dictionary:
 
-<key>NSAppTransportSecurity</key>
+<key>NSAppTransportSecurity</key><true/>
 <key>NSAllowsArbitraryLoads</key><true/>
 
 Server Side :
