@@ -24,7 +24,7 @@ migrate_working_dir/
 *.user
 *.userosscache
 *.sln.docstates
-
+/server/build
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

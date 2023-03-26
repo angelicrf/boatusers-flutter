@@ -1,25 +1,19 @@
-import 'dart:async';
 import 'dart:convert';
-import 'dart:io' show Platform;
 import 'package:boatusers/components/about.dart';
-import 'package:boatusers/components/footerMb.dart';
-import 'package:boatusers/components/footerWeb.dart';
 import 'package:boatusers/components/mainWidgets.dart';
 import 'package:boatusers/routes/routesHandler.dart';
 import 'package:boatusers/src/redux/posts/post_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:boatusers/src/redux/store.dart';
 import 'package:boatusers/src/models/post.dart';
-import 'package:boatusers/src/redux/posts/post_action.dart';
 import 'package:http/http.dart' as http;
-import 'package:redux_persist_flutter/redux_persist_flutter.dart';
 import 'package:upgrader/upgrader.dart';
+import 'components/footerMb.dart';
+import 'components/footerWeb.dart';
 import 'components/searchWidget.dart';
 import 'components/storeCMainWidgets.dart';
-import 'src/redux/store.dart';
 
 void main() async {
   final runnableApp = _buildRunnableApp(
@@ -27,7 +21,7 @@ void main() async {
     webAppWidth: 720.0,
     app: const BoatUsersApp(),
   );
-  runApp(runnableApp);
+  runApp(const BoatUsersApp());
   Redux();
 }
 
@@ -67,34 +61,22 @@ class BoatUsersApp extends StatelessWidget {
     print('firstClassCalled');
     return StoreProvider<StoreState>(
         store: Redux.store,
-        child: kIsWeb || Platform.isAndroid
-            ? MaterialApp(
-                title: 'Boat Users',
-                theme: ThemeData(
-                    primarySwatch: Colors.cyan,
-                    scaffoldBackgroundColor:
-                        Color.fromARGB(255, 224, 248, 242)),
-                debugShowCheckedModeBanner: false,
-                onGenerateRoute: handleRoutes,
-                home: UpgradeAlert(
-                    child: Scaffold(
-                  appBar: AppBar(title: Text('Upgrader Example')),
-                  body: BUHomePage('Boat Users App', UniqueKey()),
-                )))
-            : CupertinoApp(
-                title: 'Boat Users',
-                theme: const CupertinoThemeData(
-                  primaryColor: Colors.cyan,
-                  scaffoldBackgroundColor: Color.fromARGB(255, 224, 248, 242),
-                ),
-                onGenerateRoute: handleRoutes,
-                home: BUHomePage('Boat Users App', UniqueKey()),
-              ));
+        child: MaterialApp(
+            title: 'Boat Users',
+            theme: ThemeData(
+                primarySwatch: Colors.cyan,
+                scaffoldBackgroundColor:
+                    const Color.fromARGB(255, 224, 248, 242)),
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: handleRoutes,
+            home: UpgradeAlert(
+                child: BUHomePage('Boat Users App', UniqueKey()))));
   }
 }
 
 class BUHomePage extends StatefulWidget {
   const BUHomePage(this.buTitle, this.key) : super(key: key);
+  @override
   final Key key;
   final String buTitle;
 
@@ -105,7 +87,7 @@ class BUHomePage extends StatefulWidget {
 class _BUHomePageState extends State<BUHomePage> {
   int _buCount = 0;
   bool isRendered = false;
-  int _indexSelected = 0;
+  final int _indexSelected = 0;
   late List<Widget> mWidgets;
   late List<Widget> stCWidgets;
   final buserNameController = TextEditingController();
@@ -127,7 +109,7 @@ class _BUHomePageState extends State<BUHomePage> {
   }
 
   _onFetchPostsPressed() async {
-    await Redux.store.dispatch(PostState(true, false, <Post>[] as List<Post>));
+    await Redux.store.dispatch(PostState(true, false, <Post>[]));
     try {
       final response = await http
           .get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
@@ -139,10 +121,10 @@ class _BUHomePageState extends State<BUHomePage> {
         PostState(false, false, thisValue),
       );
       setState(() {
-        this._buCount += 20;
+        _buCount += 20;
       });
     } catch (error) {
-      Redux.store.dispatch(PostState(false, true, <Post>[] as List<Post>));
+      Redux.store.dispatch(PostState(false, true, <Post>[]));
     }
   }
 
@@ -154,8 +136,8 @@ class _BUHomePageState extends State<BUHomePage> {
         context,
         MaterialPageRoute(
           builder: (context) => About(
-            appUserName: '$appUName',
-            appUserPassword: '$appPwd',
+            appUserName: appUName,
+            appUserPassword: appPwd,
           ),
         ),
       );
@@ -197,7 +179,6 @@ class _BUHomePageState extends State<BUHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    //bool isIos = Theme.of(context).platform == TargetPlatform.iOS;
     stCWidgets = StoreCMainWidgets(context).storeConnectorW();
     mWidgets = MainWidgets().thisW(context, buserNameController,
         buPasswordController, _buCount, _SubmitInputs, _onFetchPostsPressed);
@@ -235,6 +216,7 @@ class _BUHomePageState extends State<BUHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             ...mWidgets,
             ...stCWidgets,
@@ -244,9 +226,10 @@ class _BUHomePageState extends State<BUHomePage> {
                   color: Colors.amber,
                   child: FooterMB(),
                 );
-              } else
-                return SizedBox.shrink();
-            }())
+              } else {
+                return const SizedBox.shrink();
+              }
+            }()),
           ],
         ),
       ),

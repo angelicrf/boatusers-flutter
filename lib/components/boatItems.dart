@@ -1,7 +1,6 @@
 import 'package:boatusers/components/ItemsDetail/itemColorComponent.dart'
     as globals;
 import 'package:boatusers/components/searchWidget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -54,7 +53,11 @@ class _BoatItemsState extends State<BoatItems> {
             //Row(children: <Widget>[
             // Flexible(
             //child:
-            displayCatalog(context, dataEntries));
+
+            Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: displayCatalog(context, dataEntries),
+        ));
     //]));
   }
 
@@ -62,21 +65,23 @@ class _BoatItemsState extends State<BoatItems> {
     return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 5,
-          crossAxisSpacing: 5,
-          mainAxisExtent: kIsWeb ? 600.0 : 450.0,
+          mainAxisSpacing: 15,
+          crossAxisSpacing: 15,
+          mainAxisExtent: kIsWeb ? 600.0 : 280.0,
         ),
         itemCount: dataEntries.length,
         shrinkWrap: true,
         physics: const ScrollPhysics(),
         itemBuilder: (context, index) => Center(
                 child: Container(
-              width: kIsWeb ? 350.0 : 250.0,
+              width: kIsWeb ? 350.0 : 200.0,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.0),
-                  color: Color.fromARGB(255, 211, 171, 171)),
-              padding: kIsWeb ? EdgeInsets.all(8.0) : EdgeInsets.all(3.0),
+                  color: const Color.fromARGB(255, 211, 171, 171)),
+              padding: kIsWeb
+                  ? const EdgeInsets.all(8.0)
+                  : const EdgeInsets.all(3.0),
               child: Card(
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -84,23 +89,7 @@ class _BoatItemsState extends State<BoatItems> {
                   Expanded(
                     child: isSelectedColor &&
                             dataEntries[index].buItemId == thisClickedId
-                        ?
-                        /*  ShaderMask(
-                            shaderCallback: (bounds) {
-                              return LinearGradient(colors: [
-                                globals.ItemColorComponent.thisColor ==
-                                        Colors.black
-                                    ? Colors.blue
-                                    : globals.ItemColorComponent.thisColor,
-                                globals.ItemColorComponent.thisColor ==
-                                        Colors.black
-                                    ? Colors.green
-                                    : globals.ItemColorComponent.thisColor,
-                              ]).createShader(bounds);
-                            },
-                            blendMode: BlendMode.colorBurn,
-                         */
-                        Container(
+                        ? Container(
                             height: double.infinity,
                             width: double.infinity,
                             decoration: BoxDecoration(
@@ -117,9 +106,9 @@ class _BoatItemsState extends State<BoatItems> {
                                                 .ItemColorComponent.thisColor,
                                         BlendMode.color))),
                             child: const SizedBox(
-                              height: 250.0,
-                              width: 250.0,
-                            ))
+                                //height: 250.0,
+                                //width: 250.0,
+                                ))
                         : isSelectedColor &&
                                 dataEntries[index].buItemId != thisClickedId
                             ? Image.network(
@@ -134,7 +123,8 @@ class _BoatItemsState extends State<BoatItems> {
                             : Image.network(
                                 dataEntries[index].buItemImages[0],
                                 //'https://picsum.photos/250?image=9',
-                                fit: BoxFit.fill,
+                                fit: BoxFit.cover,
+                                //height: 200.0,
                                 errorBuilder: (BuildContext context,
                                     Object exception, StackTrace? stackTrace) {
                                   return Text(
@@ -143,32 +133,34 @@ class _BoatItemsState extends State<BoatItems> {
                               ),
                   ),
                   const SizedBox(
-                    height: 20.0,
+                    height: kIsWeb ? 20.0 : 5.0,
                   ),
                   Padding(
                       padding: const EdgeInsets.only(left: 10.0),
                       child: Text(
-                        'Item: ${dataEntries[index].buItemName}',
+                        dataEntries[index].buItemName,
                         style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          fontSize: kIsWeb ? 18 : 15.0,
+                          fontWeight:
+                              kIsWeb ? FontWeight.bold : FontWeight.normal,
                         ),
                       )),
                   const SizedBox(
-                    height: 10.0,
+                    height: kIsWeb ? 20.0 : 5.0,
                   ),
                   Padding(
                       padding: const EdgeInsets.only(left: 10.0),
                       child: Text(
-                        'Price: ${dataEntries[index].buPrice} \$',
+                        '${dataEntries[index].buPrice} \$',
                         style: const TextStyle(
                           fontSize: 15,
                           color: Colors.deepOrange,
-                          fontWeight: FontWeight.bold,
+                          fontWeight:
+                              kIsWeb ? FontWeight.bold : FontWeight.normal,
                         ),
                       )),
                   const SizedBox(
-                    height: 20.0,
+                    height: kIsWeb ? 20.0 : 5.0,
                   ),
                   globals.ItemColorComponent().itemsColors(
                       context,
@@ -178,7 +170,10 @@ class _BoatItemsState extends State<BoatItems> {
                             thisClickedId = dataEntries[index].buItemId;
                             isSelectedColor = true;
                           })),
-                  Row(
+                  const SizedBox(
+                    height: 5.0,
+                  )
+                  /*         Row(
                     children: [
                       Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -190,7 +185,7 @@ class _BoatItemsState extends State<BoatItems> {
                             ),
                           )),
                     ],
-                  ),
+                  ), */
                 ],
               )),
             )));

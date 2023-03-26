@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -7,21 +6,12 @@ class ItemColorComponent {
   Widget itemsColors(BuildContext context, List<Color> itemColors,
       void Function() colorPressed) {
     var listItems = <Widget>[
-      const Padding(
-          padding: EdgeInsets.only(top: kIsWeb ? 12.0 : 5.0),
-          child: Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text('Colors:',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  )))),
       const SizedBox(
         width: 10.0,
       )
     ];
 
-    itemColors.forEach((element) {
+    for (var element in itemColors) {
       listItems.add(Row(
         children: [
           Container(
@@ -34,7 +24,7 @@ class ItemColorComponent {
                 border: Border.all(color: Colors.black, width: 3.0)),
             child: IconButton(
               padding: EdgeInsets.zero,
-              icon: Icon(
+              icon: const Icon(
                 Icons.abc,
                 //fill: 1.0,
               ),
@@ -52,12 +42,14 @@ class ItemColorComponent {
           )
         ],
       ));
-    });
+    }
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: listItems,
+          children: [
+            ...listItems,
+          ],
         ));
   }
 }
