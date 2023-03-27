@@ -1,4 +1,5 @@
 import 'package:boatusers/components/ItemsDetail/ItemsWidgets/boatItemsWidget.dart';
+import 'package:boatusers/components/ItemsDetail/ItemsWidgets/itemListHorizantal.dart';
 import 'package:boatusers/components/searchWidget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,8 @@ class _BoatItemsState extends State<BoatItems> {
   final dataEntries = ProductModel.itemsData();
   bool isSelectedColor = false;
   int thisClickedId = 0;
+  bool isSelectedHColor = false;
+  int thisClickedHId = 0;
 
   @override
   void dispose() {
@@ -48,29 +51,47 @@ class _BoatItemsState extends State<BoatItems> {
                     }))
           ],
         ),
-        body:
-            //Row(children: <Widget>[
-            // Flexible(
-            //child:
-
-            Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: BoatItemsWidget.displayCatalog(
-              context,
-              dataEntries,
-              isSelectedColor,
-              thisClickedId,
-              () => {
-                    setState(
-                      () {
-                        print(dataEntries[BoatItemsWidget.thisIndex].buItemId);
-                        thisClickedId =
-                            dataEntries[BoatItemsWidget.thisIndex].buItemId;
-                        isSelectedColor = true;
-                      },
-                    )
-                  }),
-        ));
-    //]));
+        body: Column(mainAxisSize: MainAxisSize.max, children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: ItemListHorizantal.displayItemsListHorizantal(
+                context,
+                dataEntries,
+                isSelectedHColor,
+                thisClickedHId,
+                () => {
+                      setState(
+                        () {
+                          print(dataEntries[ItemListHorizantal.thisLHIndex]
+                              .buItemId);
+                          thisClickedHId =
+                              dataEntries[ItemListHorizantal.thisLHIndex]
+                                  .buItemId;
+                          isSelectedHColor = true;
+                        },
+                      )
+                    }),
+          ),
+          Expanded(
+              child: Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: BoatItemsWidget.displayCatalog(
+                context,
+                dataEntries,
+                isSelectedColor,
+                thisClickedId,
+                () => {
+                      setState(
+                        () {
+                          print(
+                              dataEntries[BoatItemsWidget.thisIndex].buItemId);
+                          thisClickedId =
+                              dataEntries[BoatItemsWidget.thisIndex].buItemId;
+                          isSelectedColor = true;
+                        },
+                      )
+                    }),
+          )),
+        ]));
   }
 }
