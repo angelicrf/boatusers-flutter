@@ -1,8 +1,10 @@
 import 'package:boatusers/Models/productModel.dart';
 import 'package:boatusers/components/ItemsDetail/ItemsWidgets/itemImageWidget.dart';
-import 'package:boatusers/components/boatItems.dart';
+import 'package:boatusers/components/ItemsDetail/itemColorComponent.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import '../boatItems.dart';
 
 class ItemComponent extends StatefulWidget {
   const ItemComponent({super.key});
@@ -12,6 +14,8 @@ class ItemComponent extends StatefulWidget {
 }
 
 class _ItemComponentState extends State<ItemComponent> {
+  Color selectColor = Colors.black;
+
   @override
   Widget build(BuildContext context) {
     final arguments =
@@ -28,8 +32,22 @@ class _ItemComponentState extends State<ItemComponent> {
               ...ProductModel.itemsData().map((e) => e.buItemId == buId
                   ? Expanded(
                       child: ItemImageWidget.ItemDetailsImageWidget(
-                          context, e.buItemImages[0]))
+                          context, e.buItemImages[0], selectColor))
                   : const SizedBox.shrink()),
+              ...ProductModel.itemsData().map(
+                (e) => e.buItemId == buId
+                    ? ItemColorComponent().itemsColors(
+                        context,
+                        e.buItemColors,
+                        () => {
+                              setState(() {
+                                selectColor = ItemColorComponent.thisColor;
+                              })
+                            },
+                        false,
+                        false)
+                    : const SizedBox.shrink(),
+              ),
               Container(
                 color: Colors.white,
                 height: kIsWeb ? 30.0 : 10.0,
@@ -39,7 +57,6 @@ class _ItemComponentState extends State<ItemComponent> {
                 child: Row(
                   children: [
                     FloatingActionButton(
-                      backgroundColor: const Color.fromARGB(255, 177, 42, 60),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -47,6 +64,7 @@ class _ItemComponentState extends State<ItemComponent> {
                               builder: (context) => const BoatItems()),
                         );
                       },
+                      backgroundColor: const Color.fromARGB(255, 111, 57, 53),
                       child: const Icon(Icons.arrow_back),
                     )
                   ],
