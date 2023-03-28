@@ -31,7 +31,8 @@ class ProductModel {
       ProductModel(
           buIsItemLiked: false,
           buItemImages: [
-            'https://images.pexels.com/photos/7412073/pexels-photo-7412073.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+            'https://cdn.pixabay.com/photo/2016/04/01/08/30/bag-1298763_1280.png',
+            // 'https://images.pexels.com/photos/7412073/pexels-photo-7412073.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
             'https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
             'https://images.pexels.com/photos/6345208/pexels-photo-6345208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
           ],
@@ -47,8 +48,11 @@ class ProductModel {
       ProductModel(
           buIsItemLiked: false,
           buItemImages: [
-            'https://images.pexels.com/photos/6664045/pexels-photo-6664045.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            'https://images.pexels.com/photos/4210314/pexels-photo-4210314.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+            'https://www.freepnglogos.com/uploads/headphones-png/headphones-transparent-png-pictures-icons-and-png-26.png',
+            'https://www.freepnglogos.com/uploads/anchor-png/images-for-anchor-png-cliparts-39.png',
+            //'https://www.freepnglogos.com/uploads/shoes-png/download-running-shoes-png-image-png-image-pngimg-4.png',
+            //'https://www.freepnglogos.com/uploads/shoes-png/download-adidas-shoes-transparent-png-images-icons-18.png',
+            'https://www.freepnglogos.com/uploads/shopping-bag-png/shopping-bag-business-icons-22.png',
             'https://images.pexels.com/photos/4210337/pexels-photo-4210337.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
           ],
           buItemReviews: [],

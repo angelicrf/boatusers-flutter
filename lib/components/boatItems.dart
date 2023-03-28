@@ -73,25 +73,26 @@ class _BoatItemsState extends State<BoatItems> {
                     }),
           ),
           Expanded(
-              child: Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: BoatItemsWidget.displayCatalog(
-                context,
-                dataEntries,
-                isSelectedColor,
-                thisClickedId,
-                () => {
-                      setState(
-                        () {
-                          print(
-                              dataEntries[BoatItemsWidget.thisIndex].buItemId);
-                          thisClickedId =
-                              dataEntries[BoatItemsWidget.thisIndex].buItemId;
-                          isSelectedColor = true;
-                        },
-                      )
-                    }),
-          )),
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: BoatItemsWidget.displayCatalog(
+                  context,
+                  dataEntries,
+                  isSelectedColor,
+                  thisClickedId,
+                  () => {
+                        setState(
+                          () {
+                            print(dataEntries[BoatItemsWidget.thisIndex]
+                                .buItemId);
+                            thisClickedId =
+                                dataEntries[BoatItemsWidget.thisIndex].buItemId;
+                            isSelectedColor = true;
+                          },
+                        )
+                      }),
+            ),
+          ),
         ]));
   }
 }
