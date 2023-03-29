@@ -1,6 +1,7 @@
 import 'package:boatusers/Models/productModel.dart';
 import 'package:boatusers/components/ItemsDetail/itemColorComponent.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -31,35 +32,45 @@ class _ItemComponentState extends State<ItemComponent> {
             children: [
               for (int i = 0; i < ProductModel.itemsData().length; i++)
                 ProductModel.itemsData()[i].buItemId == buId
-                    ? Expanded(
-                        child: CarouselSlider(
-                          items: [
-                            for (int j = 0;
-                                j <
-                                    ProductModel.itemsData()[i]
-                                        .buItemImages
-                                        .length;
-                                j++)
-                              ItemImageWidget.ItemDetailsImageWidget(
-                                  context,
-                                  ProductModel.itemsData()[i].buItemImages[j],
-                                  selectColor)
-                          ],
-                          options: CarouselOptions(
-                              height: 500.0,
-                              enlargeCenterPage: true,
-                              autoPlay: true,
-                              autoPlayCurve: Curves.fastOutSlowIn,
-                              enableInfiniteScroll: true,
-                              aspectRatio: 3.0,
-                              viewportFraction: 0.8,
-                              onPageChanged: (index, reason) {
-                                setState(() {
-                                  //_current = index;
-                                });
-                              }),
-                        ),
-                      )
+                    ? !kIsWeb
+                        ? Expanded(
+                            child: CarouselSlider(
+                              items: [
+                                for (int j = 0;
+                                    j <
+                                        ProductModel.itemsData()[i]
+                                            .buItemImages
+                                            .length;
+                                    j++)
+                                  ItemImageWidget.ItemDetailsImageWidget(
+                                      context,
+                                      ProductModel.itemsData()[i]
+                                          .buItemImages[j],
+                                      selectColor)
+                              ],
+                              options: CarouselOptions(
+                                  height: 500.0,
+                                  enlargeCenterPage: true,
+                                  autoPlayInterval: const Duration(seconds: 9),
+                                  autoPlay: true,
+                                  autoPlayCurve: Curves.fastOutSlowIn,
+                                  enableInfiniteScroll: true,
+                                  enlargeStrategy:
+                                      CenterPageEnlargeStrategy.zoom,
+                                  aspectRatio: 16 / 9,
+                                  viewportFraction: 0.8,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {});
+                                  }),
+                            ),
+                          )
+                        : Expanded(
+                            child: Row(children: [
+                            ItemImageWebWidget.itemDetailsWebImageWidget(
+                                context,
+                                ProductModel.itemsData()[i].buItemImages[0],
+                                selectColor)
+                          ]))
                     : const SizedBox.shrink(),
               ...ProductModel.itemsData().map(
                 (e) => e.buItemId == buId

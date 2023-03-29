@@ -15,17 +15,20 @@ class ItemColorComponent {
       listItems.add(Row(
         children: [
           Container(
-            width: kIsWeb
-                ? 50.0
+            width: kIsWeb && (isHorizantal || isVertical)
+                ? 35.0
                 : isHorizantal || isVertical
                     ? 35.0
-                    : 60.0,
-            //MediaQuery.of(context).size.width / 7,
-            height: kIsWeb
-                ? 50.0
+                    : kIsWeb && (!isHorizantal || !isVertical)
+                        ? 60.0
+                        : 60.0,
+            height: kIsWeb && (isHorizantal || isVertical)
+                ? 35.0
                 : isHorizantal || isVertical
                     ? 35.0
-                    : 60.0,
+                    : kIsWeb && (!isHorizantal || !isVertical)
+                        ? 60.0
+                        : 60.0,
             decoration: BoxDecoration(
                 color: element,
                 shape: BoxShape.circle,
