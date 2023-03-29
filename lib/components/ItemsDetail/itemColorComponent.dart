@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ItemColorComponent {
   static Color thisColor = Colors.black;
   Widget itemsColors(BuildContext context, List<Color> itemColors,
-      void Function() colorPressed) {
+      void Function() colorPressed, bool isHorizantal, bool isVertical) {
     var listItems = <Widget>[
       const SizedBox(
         width: 10.0,
@@ -15,9 +15,17 @@ class ItemColorComponent {
       listItems.add(Row(
         children: [
           Container(
-            width: kIsWeb ? 50.0 : 35.0,
+            width: kIsWeb
+                ? 50.0
+                : isHorizantal || isVertical
+                    ? 35.0
+                    : 60.0,
             //MediaQuery.of(context).size.width / 7,
-            height: kIsWeb ? 50.0 : 35.0,
+            height: kIsWeb
+                ? 50.0
+                : isHorizantal || isVertical
+                    ? 35.0
+                    : 60.0,
             decoration: BoxDecoration(
                 color: element,
                 shape: BoxShape.circle,
@@ -45,11 +53,15 @@ class ItemColorComponent {
     }
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ...listItems,
-          ],
+        child: Container(
+          color: !isHorizantal ? Colors.white : Colors.transparent,
+          width: !isHorizantal ? MediaQuery.of(context).size.width : 150.0,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...listItems,
+            ],
+          ),
         ));
   }
 }

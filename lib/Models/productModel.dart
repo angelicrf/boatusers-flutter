@@ -31,10 +31,9 @@ class ProductModel {
       ProductModel(
           buIsItemLiked: false,
           buItemImages: [
-            'https://cdn.pixabay.com/photo/2016/04/01/08/30/bag-1298763_1280.png',
-            // 'https://images.pexels.com/photos/7412073/pexels-photo-7412073.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            'https://images.pexels.com/photos/1639729/pexels-photo-1639729.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            'https://images.pexels.com/photos/6345208/pexels-photo-6345208.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+            'https://cdn.pixabay.com/photo/2014/04/02/10/46/circle-304524_1280.png',
+            'https://cdn.pixabay.com/photo/2013/07/13/12/42/lifebelt-160144_1280.png',
+            'https://cdn.pixabay.com/photo/2013/07/12/12/52/lifebelt-146420_1280.png'
           ],
           buItemReviews: [],
           buItemRates: [],
@@ -48,12 +47,9 @@ class ProductModel {
       ProductModel(
           buIsItemLiked: false,
           buItemImages: [
-            'https://www.freepnglogos.com/uploads/headphones-png/headphones-transparent-png-pictures-icons-and-png-26.png',
-            'https://www.freepnglogos.com/uploads/anchor-png/images-for-anchor-png-cliparts-39.png',
-            //'https://www.freepnglogos.com/uploads/shoes-png/download-running-shoes-png-image-png-image-pngimg-4.png',
-            //'https://www.freepnglogos.com/uploads/shoes-png/download-adidas-shoes-transparent-png-images-icons-18.png',
-            'https://www.freepnglogos.com/uploads/shopping-bag-png/shopping-bag-business-icons-22.png',
-            'https://images.pexels.com/photos/4210337/pexels-photo-4210337.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+            'https://cdn.pixabay.com/photo/2021/11/21/06/45/anchor-6813317_1280.png',
+            'https://cdn.pixabay.com/photo/2014/04/03/09/58/anchor-309481_1280.png',
+            'https://cdn.pixabay.com/photo/2016/02/28/21/22/anchor-1227607_1280.png'
           ],
           buItemReviews: [],
           buItemRates: [],
@@ -67,9 +63,9 @@ class ProductModel {
       ProductModel(
           buIsItemLiked: false,
           buItemImages: [
-            'https://images.pexels.com/photos/13610995/pexels-photo-13610995.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            'https://images.pexels.com/photos/14121604/pexels-photo-14121604.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            'https://images.pexels.com/photos/14036608/pexels-photo-14036608.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+            'https://cdn.pixabay.com/photo/2016/03/31/21/27/camera-1296434_1280.png',
+            'https://cdn.pixabay.com/photo/2012/04/25/00/55/camcorder-41496_1280.png',
+            'https://cdn.pixabay.com/photo/2012/04/18/12/02/camera-36840_1280.png'
           ],
           buItemReviews: [],
           buItemRates: [],
@@ -83,9 +79,9 @@ class ProductModel {
       ProductModel(
           buIsItemLiked: false,
           buItemImages: [
-            'https://images.pexels.com/photos/4239014/pexels-photo-4239014.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            'https://images.pexels.com/photos/15848006/pexels-photo-15848006.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-            'https://images.pexels.com/photos/15925462/pexels-photo-15925462.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+            'https://cdn.pixabay.com/photo/2012/04/24/23/27/usb-41108_1280.png',
+            'https://cdn.pixabay.com/photo/2014/04/02/10/35/usb-stick-303942_1280.png',
+            'https://cdn.pixabay.com/photo/2013/07/12/18/17/flash-drive-153204_1280.png'
           ],
           buItemReviews: [],
           buItemRates: [],

@@ -125,7 +125,9 @@ class BoatItemsWidget {
                                   thisIndex = index,
                                   displaySetState(),
                                   print(thisIndex),
-                                })
+                                },
+                            false,
+                            true)
                       ],
                     )),
               ),

@@ -53,78 +53,50 @@ class ItemListHorizantal {
                                                     dataEntries[index].buItemId,
                                               })));
                                     },
-                                    child: Container(
-                                        height: 140.0,
-                                        width: 120.0,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                            image: DecorationImage(
-                                                image: NetworkImage(
-                                                    dataEntries[index]
-                                                        .buItemImages[0]),
-                                                fit: BoxFit.cover,
-                                                colorFilter: ColorFilter.mode(
-                                                    ItemColorComponent
-                                                                .thisColor ==
-                                                            Colors.black
-                                                        ? Colors.blue
-                                                        : ItemColorComponent
-                                                            .thisColor,
-                                                    BlendMode.color))),
-                                        child: const SizedBox()))
-                                : isSelectedColor &&
-                                        dataEntries[index].buItemId !=
-                                            thisClickedId
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const ItemComponent(),
-                                                  settings:
-                                                      RouteSettings(arguments: {
-                                                    'buItemId':
-                                                        dataEntries[index]
-                                                            .buItemId,
-                                                  })));
-                                        },
-                                        child: Image.network(
-                                          dataEntries[index].buItemImages[0],
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (BuildContext context,
-                                              Object exception,
-                                              StackTrace? stackTrace) {
-                                            return Text(
-                                                'not displayed ${exception.toString()}');
-                                          },
-                                        ))
-                                    : GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const ItemComponent(),
-                                                  settings:
-                                                      RouteSettings(arguments: {
-                                                    'buItemId':
-                                                        dataEntries[index]
-                                                            .buItemId,
-                                                  })));
-                                        },
-                                        child: Center(
-                                            child: Container(
-                                                height: 140.0,
-                                                width: 120.0,
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(15.0),
-                                                    image: DecorationImage(
-                                                      image: NetworkImage(
-                                                          dataEntries[index]
-                                                              .buItemImages[0]),
-                                                      fit: BoxFit.cover,
-                                                    )),
-                                                child: const SizedBox()))),
+                                    child: ColorFiltered(
+                                        colorFilter: ColorFilter.mode(
+                                            ItemColorComponent.thisColor ==
+                                                    Colors.black
+                                                ? Colors.blue
+                                                : ItemColorComponent.thisColor,
+                                            BlendMode.hue),
+                                        child: Container(
+                                            color: Colors.white,
+                                            height: 200.0,
+                                            width: 130.0,
+                                            child: Image.network(
+                                              dataEntries[index]
+                                                  .buItemImages[0],
+                                              height: MediaQuery.of(context)
+                                                  .size
+                                                  .height,
+                                            ))))
+                                : GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const ItemComponent(),
+                                              settings:
+                                                  RouteSettings(arguments: {
+                                                'buItemId':
+                                                    dataEntries[index].buItemId,
+                                              })));
+                                    },
+                                    child: Center(
+                                        child: Container(
+                                            height: 140.0,
+                                            width: 120.0,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      dataEntries[index]
+                                                          .buItemImages[0]),
+                                                  fit: BoxFit.cover,
+                                                )),
+                                            child: const SizedBox()))),
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,23 +130,11 @@ class ItemListHorizantal {
                                         thisLHIndex = index,
                                         displaySetState(),
                                         print(thisLHIndex),
-                                      }),
+                                      },
+                                  true,
+                                  false),
                             ],
                           ),
-
-                          /*         Row(
-                    children: [
-                      Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text(
-                            dataEntries[index].buDescription,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),
-                          )),
-                    ],
-                  ), */
                         ],
                       ),
                     ))));
