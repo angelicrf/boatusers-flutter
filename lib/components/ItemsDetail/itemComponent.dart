@@ -1,11 +1,11 @@
 import 'package:boatusers/Models/productModel.dart';
-import 'package:boatusers/components/ItemsDetail/itemColorComponent.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'ItemsWidgets/itemImageWidget.dart';
+import 'itemColorComponent.dart';
 
 class ItemComponent extends StatefulWidget {
   const ItemComponent({super.key});
@@ -16,6 +16,12 @@ class ItemComponent extends StatefulWidget {
 
 class _ItemComponentState extends State<ItemComponent> {
   Color selectColor = Colors.black;
+  final PageController pController = PageController();
+  @override
+  void dispose() {
+    pController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,44 +39,53 @@ class _ItemComponentState extends State<ItemComponent> {
               for (int i = 0; i < ProductModel.itemsData().length; i++)
                 ProductModel.itemsData()[i].buItemId == buId
                     ? !kIsWeb
-                        ? Expanded(
-                            child: CarouselSlider(
-                              items: [
+                        ? CarouselSlider(
+                            items: [
+                              for (int j = 0;
+                                  j <
+                                      ProductModel.itemsData()[i]
+                                          .buItemImages
+                                          .length;
+                                  j++)
+                                ItemImageWidget.ItemDetailsImageWidget(
+                                    context,
+                                    ProductModel.itemsData()[i].buItemImages[j],
+                                    selectColor),
+                            ],
+                            options: CarouselOptions(
+                                enlargeCenterPage: true,
+                                autoPlayInterval: const Duration(seconds: 9),
+                                autoPlay: true,
+                                autoPlayCurve: Curves.fastOutSlowIn,
+                                enableInfiniteScroll: true,
+                                enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                                aspectRatio: 16 / 9,
+                                viewportFraction: 1,
+                                onPageChanged: (index, reason) {
+                                  setState(() {});
+                                }),
+                            // ),
+                          )
+                        : SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height / 2,
+                            child: PageView(
+                              // controller to set color from each swipe from grey to selectColor
+                              controller: pController,
+                              children: [
                                 for (int j = 0;
                                     j <
                                         ProductModel.itemsData()[i]
                                             .buItemImages
                                             .length;
                                     j++)
-                                  ItemImageWidget.ItemDetailsImageWidget(
+                                  ItemImageWebWidget.itemDetailsWebImageWidget(
                                       context,
                                       ProductModel.itemsData()[i]
                                           .buItemImages[j],
                                       selectColor)
                               ],
-                              options: CarouselOptions(
-                                  height: 500.0,
-                                  enlargeCenterPage: true,
-                                  autoPlayInterval: const Duration(seconds: 9),
-                                  autoPlay: true,
-                                  autoPlayCurve: Curves.fastOutSlowIn,
-                                  enableInfiniteScroll: true,
-                                  enlargeStrategy:
-                                      CenterPageEnlargeStrategy.zoom,
-                                  aspectRatio: 16 / 9,
-                                  viewportFraction: 0.8,
-                                  onPageChanged: (index, reason) {
-                                    setState(() {});
-                                  }),
-                            ),
-                          )
-                        : Expanded(
-                            child: Row(children: [
-                            ItemImageWebWidget.itemDetailsWebImageWidget(
-                                context,
-                                ProductModel.itemsData()[i].buItemImages[0],
-                                selectColor)
-                          ]))
+                            ))
                     : const SizedBox.shrink(),
               ...ProductModel.itemsData().map(
                 (e) => e.buItemId == buId
@@ -90,7 +105,6 @@ class _ItemComponentState extends State<ItemComponent> {
                 color: Colors.white,
                 height: kIsWeb ? 30.0 : 10.0,
               ),
-              //
               Container(
                 color: Colors.white,
                 child: Row(

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:boatusers/components/about.dart';
 import 'package:boatusers/components/mainWidgets.dart';
 import 'package:boatusers/routes/routesHandler.dart';
@@ -53,6 +54,15 @@ Widget _buildRunnableApp({
   );
 }
 
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
+}
+
 class BoatUsersApp extends StatelessWidget {
   const BoatUsersApp({super.key});
 
@@ -63,6 +73,7 @@ class BoatUsersApp extends StatelessWidget {
         store: Redux.store,
         child: MaterialApp(
             title: 'Boat Users',
+            scrollBehavior: MyCustomScrollBehavior(),
             theme: ThemeData(
                 primarySwatch: Colors.cyan,
                 scaffoldBackgroundColor:

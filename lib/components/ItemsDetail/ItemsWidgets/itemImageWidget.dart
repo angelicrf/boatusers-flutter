@@ -11,8 +11,10 @@ class ItemImageWidget {
         colorFilter: ColorFilter.mode(thisColor, BlendMode.hue),
         child: Container(
           color: Colors.white,
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: 300,
+          //MediaQuery.of(context).size.height,
+          width: 300,
+          //MediaQuery.of(context).size.width,
           child: Image.network(thisImgSrc),
         ),
       ),
@@ -21,20 +23,15 @@ class ItemImageWidget {
 }
 
 class ItemImageWebWidget {
-  //loop images
   static Widget itemDetailsWebImageWidget(
       BuildContext context, String thisImgSrc, Color thisColor) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.width,
-      child: ColorFiltered(
-          colorFilter: ColorFilter.mode(thisColor, BlendMode.hue),
-          child: Container(
-            color: Colors.white,
-            height: MediaQuery.of(context).size.width,
-            width: MediaQuery.of(context).size.width,
-            child: Image.network(thisImgSrc),
-          )),
-    );
+    return ColorFiltered(
+        colorFilter: ColorFilter.mode(thisColor, BlendMode.hue),
+        child: Container(
+          color: Colors.white,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Image.network(thisImgSrc),
+        ));
   }
 }
