@@ -16,7 +16,11 @@ class ItemComponent extends StatefulWidget {
 
 class _ItemComponentState extends State<ItemComponent> {
   Color selectColor = Colors.black;
-  final PageController pController = PageController();
+  final PageController pController = PageController(initialPage: 0);
+  bool isColorChanged = false;
+  bool isImageHovered = false;
+  int hoveredImageIndex = 0;
+
   @override
   void dispose() {
     pController.dispose();
@@ -66,26 +70,89 @@ class _ItemComponentState extends State<ItemComponent> {
                                 }),
                             // ),
                           )
-                        : SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height / 2,
-                            child: PageView(
-                              // controller to set color from each swipe from grey to selectColor
-                              controller: pController,
-                              children: [
+                        : Row(
+                            children: [
+                              Column(children: [
                                 for (int j = 0;
                                     j <
                                         ProductModel.itemsData()[i]
                                             .buItemImages
                                             .length;
                                     j++)
-                                  ItemImageWebWidget.itemDetailsWebImageWidget(
-                                      context,
-                                      ProductModel.itemsData()[i]
-                                          .buItemImages[j],
-                                      selectColor)
-                              ],
-                            ))
+                                  Listener(
+                                    onPointerHover: (event) => {
+                                      print('pointerHovered $j'),
+                                      setState(() {
+                                        isImageHovered = true;
+                                        hoveredImageIndex = j;
+                                      })
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                            border: Border.all(
+                                                color: Colors.black,
+                                                style: BorderStyle.solid)),
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: Image.network(
+                                            ProductModel.itemsData()[i]
+                                                .buItemImages[j]),
+                                      ),
+                                    ),
+                                  ),
+                              ]),
+                              SizedBox(
+                                  width: MediaQuery.of(context).size.width - 70,
+                                  height:
+                                      MediaQuery.of(context).size.height / 2,
+                                  child: Listener(
+                                      onPointerMove: (event) => {
+                                            print('pointerMove'),
+                                            setState(() {
+                                              isColorChanged = true;
+                                            })
+                                          },
+                                      child: PageView(
+                                        onPageChanged: (value) => {
+                                          print('after swipe'),
+                                          setState(() {
+                                            isColorChanged = false;
+                                          })
+                                        },
+                                        // controller to set color from each swipe from grey to selectColor
+                                        controller: pController,
+                                        children: [
+                                          for (int j = 0;
+                                              j <
+                                                  ProductModel.itemsData()[i]
+                                                      .buItemImages
+                                                      .length;
+                                              j++)
+                                            ItemImageWebWidget
+                                                .itemDetailsWebImageWidget(
+                                                    context,
+                                                    !isImageHovered
+                                                        ? ProductModel
+                                                                .itemsData()[i]
+                                                            .buItemImages[j]
+                                                        : ProductModel.itemsData()[
+                                                                    i]
+                                                                .buItemImages[
+                                                            hoveredImageIndex],
+                                                    isColorChanged
+                                                        ? Colors.grey
+                                                        : selectColor)
+                                        ],
+                                      )))
+                            ],
+                          )
                     : const SizedBox.shrink(),
               ...ProductModel.itemsData().map(
                 (e) => e.buItemId == buId
