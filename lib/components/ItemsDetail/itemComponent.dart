@@ -37,8 +37,8 @@ class _ItemComponentState extends State<ItemComponent> {
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            //mainAxisAlignment: MainAxisAlignment.start,
+            //crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               for (int i = 0; i < ProductModel.itemsData().length; i++)
                 ProductModel.itemsData()[i].buItemId == buId
@@ -70,122 +70,132 @@ class _ItemComponentState extends State<ItemComponent> {
                                 }),
                             // ),
                           )
-                        : Row(
-                            children: [
-                              Column(children: [
-                                for (int j = 0;
-                                    j <
-                                        ProductModel.itemsData()[i]
-                                            .buItemImages
-                                            .length;
-                                    j++)
-                                  Listener(
-                                    onPointerHover: (event) => {
-                                      print('pointerHovered $j'),
-                                      setState(() {
-                                        isImageHovered = true;
-                                        hoveredImageIndex = j;
-                                      })
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(10),
-                                            ),
-                                            border: Border.all(
-                                                color: Colors.black,
-                                                style: BorderStyle.solid)),
-                                        width: 50.0,
-                                        height: 50.0,
-                                        child: Image.network(
-                                            ProductModel.itemsData()[i]
-                                                .buItemImages[j]),
-                                      ),
+                        : Row(children: [
+                            Container(
+                              color: const Color.fromARGB(255, 224, 248, 242),
+                              width: MediaQuery.of(context).size.width / 5,
+                              height: MediaQuery.of(context).size.height,
+                            ),
+                            Column(children: [
+                              for (int j = 0;
+                                  j <
+                                      ProductModel.itemsData()[i]
+                                          .buItemImages
+                                          .length;
+                                  j++)
+                                Listener(
+                                  onPointerHover: (event) => {
+                                    print('pointerHovered $j'),
+                                    setState(() {
+                                      isImageHovered = true;
+                                      hoveredImageIndex = j;
+                                    })
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(10),
+                                          ),
+                                          border: Border.all(
+                                              color: Colors.black,
+                                              style: BorderStyle.solid)),
+                                      width: 50.0,
+                                      height: 50.0,
+                                      child: Image.network(
+                                          ProductModel.itemsData()[i]
+                                              .buItemImages[j]),
                                     ),
                                   ),
-                              ]),
-                              SizedBox(
-                                  width: MediaQuery.of(context).size.width - 70,
-                                  height:
-                                      MediaQuery.of(context).size.height / 2,
-                                  child: Listener(
-                                      onPointerMove: (event) => {
-                                            print('pointerMove'),
+                                ),
+                            ]),
+                            Column(
+                              children: [
+                                SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width / 2,
+                                    height:
+                                        MediaQuery.of(context).size.height / 2,
+                                    child: Listener(
+                                        onPointerMove: (event) => {
+                                              print('pointerMove'),
+                                              setState(() {
+                                                isColorChanged = true;
+                                              })
+                                            },
+                                        child: PageView(
+                                          onPageChanged: (value) => {
+                                            print('after swipe'),
                                             setState(() {
-                                              isColorChanged = true;
+                                              isColorChanged = false;
                                             })
                                           },
-                                      child: PageView(
-                                        onPageChanged: (value) => {
-                                          print('after swipe'),
+                                          // controller to set color from each swipe from grey to selectColor
+                                          controller: pController,
+                                          children: [
+                                            for (int j = 0;
+                                                j <
+                                                    ProductModel.itemsData()[i]
+                                                        .buItemImages
+                                                        .length;
+                                                j++)
+                                              ItemImageWebWidget
+                                                  .itemDetailsWebImageWidget(
+                                                      context,
+                                                      !isImageHovered
+                                                          ? ProductModel.itemsData()[
+                                                                  i]
+                                                              .buItemImages[j]
+                                                          : ProductModel.itemsData()[
+                                                                      i]
+                                                                  .buItemImages[
+                                                              hoveredImageIndex],
+                                                      isColorChanged
+                                                          ? Colors.grey
+                                                          : selectColor)
+                                          ],
+                                        ))),
+                                ItemColorComponent().itemsColors(
+                                    context,
+                                    ProductModel.itemsData()[i].buItemColors,
+                                    () => {
                                           setState(() {
-                                            isColorChanged = false;
+                                            selectColor =
+                                                ItemColorComponent.thisColor;
                                           })
                                         },
-                                        // controller to set color from each swipe from grey to selectColor
-                                        controller: pController,
-                                        children: [
-                                          for (int j = 0;
-                                              j <
-                                                  ProductModel.itemsData()[i]
-                                                      .buItemImages
-                                                      .length;
-                                              j++)
-                                            ItemImageWebWidget
-                                                .itemDetailsWebImageWidget(
-                                                    context,
-                                                    !isImageHovered
-                                                        ? ProductModel
-                                                                .itemsData()[i]
-                                                            .buItemImages[j]
-                                                        : ProductModel.itemsData()[
-                                                                    i]
-                                                                .buItemImages[
-                                                            hoveredImageIndex],
-                                                    isColorChanged
-                                                        ? Colors.grey
-                                                        : selectColor)
-                                        ],
-                                      )))
-                            ],
-                          )
+                                    false,
+                                    false),
+                                Container(
+                                  color: Colors.white,
+                                  height: kIsWeb ? 30.0 : 10.0,
+                                ),
+                                Container(
+                                  color: Colors.white,
+                                  child: Row(
+                                    children: [
+                                      FloatingActionButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 111, 57, 53),
+                                        child: const Icon(Icons.arrow_back),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            Container(
+                              color: const Color.fromARGB(255, 224, 248, 242),
+                              width: MediaQuery.of(context).size.width / 5 + 50,
+                              height: MediaQuery.of(context).size.height,
+                            ),
+                          ])
                     : const SizedBox.shrink(),
-              ...ProductModel.itemsData().map(
-                (e) => e.buItemId == buId
-                    ? ItemColorComponent().itemsColors(
-                        context,
-                        e.buItemColors,
-                        () => {
-                              setState(() {
-                                selectColor = ItemColorComponent.thisColor;
-                              })
-                            },
-                        false,
-                        false)
-                    : const SizedBox.shrink(),
-              ),
-              Container(
-                color: Colors.white,
-                height: kIsWeb ? 30.0 : 10.0,
-              ),
-              Container(
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    FloatingActionButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      backgroundColor: const Color.fromARGB(255, 111, 57, 53),
-                      child: const Icon(Icons.arrow_back),
-                    )
-                  ],
-                ),
-              )
             ],
           ),
         ));

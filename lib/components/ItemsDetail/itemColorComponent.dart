@@ -58,7 +58,7 @@ class ItemColorComponent {
         scrollDirection: Axis.horizontal,
         child: Container(
           color: !isHorizantal ? Colors.white : Colors.transparent,
-          width: !isHorizantal ? MediaQuery.of(context).size.width : 150.0,
+          width: !isHorizantal ? MediaQuery.of(context).size.width / 2 : 150.0,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
