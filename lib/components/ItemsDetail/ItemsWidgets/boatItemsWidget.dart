@@ -18,15 +18,19 @@ class BoatItemsWidget {
           crossAxisCount: 2,
           mainAxisSpacing: 15,
           crossAxisSpacing: 15,
-          mainAxisExtent: kIsWeb ? 600.0 : 280.0,
+          mainAxisExtent: kIsWeb ? 300.0 : 280.0,
         ),
         itemCount: dataEntries.length,
         shrinkWrap: true,
         physics: const ScrollPhysics(),
-        itemBuilder: (context, index) => Center(
+        itemBuilder: (context, index) => Align(
               child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
+                width: kIsWeb
+                    ? MediaQuery.of(context).size.width / 2
+                    : MediaQuery.of(context).size.width,
+                height: kIsWeb
+                    ? MediaQuery.of(context).size.height / 2
+                    : MediaQuery.of(context).size.height,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15.0),
@@ -68,7 +72,7 @@ class BoatItemsWidget {
                                               height: MediaQuery.of(context)
                                                   .size
                                                   .height,
-                                              fit: BoxFit.cover)),
+                                              fit: BoxFit.contain)),
                                     )
                                   : Container(
                                       decoration: BoxDecoration(
@@ -78,7 +82,7 @@ class BoatItemsWidget {
                                               image: NetworkImage(
                                                   dataEntries[index]
                                                       .buItemImages[0]),
-                                              fit: BoxFit.cover)))),
+                                              fit: BoxFit.contain)))),
                         ),
                         const SizedBox(
                           height: kIsWeb ? 20.0 : 5.0,
