@@ -116,7 +116,7 @@ class _ItemComponentState extends State<ItemComponent> {
                                           color: isThumbsUpClicked &&
                                                   !isThumbsDownClicked
                                               ? Colors.red
-                                              : Colors.transparent,
+                                              : null,
                                           onPressed: () {
                                             setState(() {
                                               isThumbsDownClicked = false;
@@ -135,7 +135,35 @@ class _ItemComponentState extends State<ItemComponent> {
                                                         })));
                                           },
                                           icon: const Icon(
-                                              Icons.thumb_up_off_alt_sharp))
+                                            Icons.thumb_up_off_alt_sharp,
+                                            size: 30.0,
+                                          )),
+                                      IconButton(
+                                          color: !isThumbsUpClicked &&
+                                                  isThumbsDownClicked
+                                              ? Colors.grey
+                                              : null,
+                                          onPressed: () {
+                                            setState(() {
+                                              isThumbsUpClicked = false;
+                                              isThumbsDownClicked = true;
+                                            });
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const ThumbDownItem(),
+                                                    settings: RouteSettings(
+                                                        arguments: {
+                                                          'buThumbDownItemId':
+                                                              ProductModel
+                                                                      .itemsData()[i]
+                                                                  .buItemId,
+                                                        })));
+                                          },
+                                          icon: const Icon(
+                                            Icons.thumb_down_alt_rounded,
+                                            size: 30.0,
+                                          ))
                                     ],
                                   ),
                                 ),

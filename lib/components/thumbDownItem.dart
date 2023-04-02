@@ -1,4 +1,5 @@
 import 'package:faker/faker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ThumbDownItem extends StatefulWidget {
@@ -33,8 +34,12 @@ class _ThumbDownItemState extends State<ThumbDownItem> {
                           color: Colors.grey,
                           borderRadius: BorderRadius.circular(15.0)),
                       alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width / 2,
-                      height: MediaQuery.of(context).size.height / 6,
+                      width: kIsWeb
+                          ? MediaQuery.of(context).size.width / 2
+                          : MediaQuery.of(context).size.width,
+                      height: kIsWeb
+                          ? MediaQuery.of(context).size.height / 6
+                          : MediaQuery.of(context).size.height / 4,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(

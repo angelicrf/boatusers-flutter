@@ -33,15 +33,17 @@ class _ThumUpItemState extends State<ThumUpItem> {
                     decoration: BoxDecoration(
                         color: const Color.fromARGB(255, 143, 181, 213),
                         borderRadius: BorderRadius.circular(25.0)),
-                    width: MediaQuery.of(context).size.width / 2,
+                    width: kIsWeb
+                        ? MediaQuery.of(context).size.width / 2
+                        : MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 2,
                     child: GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         mainAxisSpacing: 15,
-                        crossAxisSpacing: 15,
-                        mainAxisExtent: kIsWeb ? 150.0 : 120.0,
+                        crossAxisSpacing: kIsWeb ? 15 : 5.0,
+                        mainAxisExtent: kIsWeb ? 150.0 : 160.0,
                       ),
                       itemCount: FeedBackModel.feedBacksData().length,
                       shrinkWrap: true,
@@ -67,15 +69,18 @@ class _ThumUpItemState extends State<ThumUpItem> {
                                     : const Color.fromARGB(255, 171, 159, 124)),
                             child: Column(
                               children: [
-                                FeedBackModel.feedBacksData()[index]
-                                    .buFeedBackImageSrc,
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: FeedBackModel.feedBacksData()[index]
+                                      .buFeedBackImageSrc,
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 18.0),
                                   child: Text(
                                     FeedBackModel.feedBacksData()[index]
                                         .buFeedBack,
                                     style: const TextStyle(
-                                        fontSize: 20.0,
+                                        fontSize: kIsWeb ? 20.0 : 13.0,
                                         fontWeight: FontWeight.bold,
                                         color:
                                             Color.fromARGB(255, 149, 122, 42)),
