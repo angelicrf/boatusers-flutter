@@ -20,7 +20,7 @@ class ItemListHorizantal {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 1,
                   mainAxisSpacing: 15,
-                  mainAxisExtent: kIsWeb ? 600.0 : 290.0,
+                  mainAxisExtent: kIsWeb ? 600.0 : 320.0,
                 ),
                 itemCount: dataEntries.length,
                 scrollDirection: Axis.horizontal,
@@ -53,24 +53,28 @@ class ItemListHorizantal {
                                                     dataEntries[index].buItemId,
                                               })));
                                     },
-                                    child: ColorFiltered(
-                                        colorFilter: ColorFilter.mode(
-                                            ItemColorComponent.thisColor ==
-                                                    Colors.black
-                                                ? Colors.blue
-                                                : ItemColorComponent.thisColor,
-                                            BlendMode.hue),
-                                        child: Container(
-                                            color: Colors.white,
-                                            height: 200.0,
-                                            width: 130.0,
-                                            child: Image.network(
-                                              dataEntries[index]
-                                                  .buItemImages[0],
-                                              height: MediaQuery.of(context)
-                                                  .size
-                                                  .height,
-                                            ))))
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: ColorFiltered(
+                                          colorFilter: ColorFilter.mode(
+                                              ItemColorComponent.thisColor ==
+                                                      Colors.black
+                                                  ? Colors.blue
+                                                  : ItemColorComponent
+                                                      .thisColor,
+                                              BlendMode.hue),
+                                          child: Container(
+                                              color: Colors.white,
+                                              height: 200.0,
+                                              width: 130.0,
+                                              child: Image.network(
+                                                dataEntries[index]
+                                                    .buItemImages[0],
+                                                height: MediaQuery.of(context)
+                                                    .size
+                                                    .height,
+                                              ))),
+                                    ))
                                 : GestureDetector(
                                     onTap: () {
                                       Navigator.of(context).push(
@@ -83,7 +87,8 @@ class ItemListHorizantal {
                                                     dataEntries[index].buItemId,
                                               })));
                                     },
-                                    child: Center(
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
                                         child: Container(
                                             height: 140.0,
                                             width: 120.0,
@@ -94,7 +99,7 @@ class ItemListHorizantal {
                                                   image: NetworkImage(
                                                       dataEntries[index]
                                                           .buItemImages[0]),
-                                                  fit: BoxFit.cover,
+                                                  fit: BoxFit.contain,
                                                 )),
                                             child: const SizedBox()))),
                           ),

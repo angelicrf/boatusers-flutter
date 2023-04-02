@@ -75,42 +75,49 @@ class _BoatItemsState extends State<BoatItems> {
         Expanded(
           child: Row(
             children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 4,
-                height: MediaQuery.of(context).size.height,
-                color: const Color.fromARGB(255, 224, 248, 242),
-              ),
+              kIsWeb
+                  ? Container(
+                      width: MediaQuery.of(context).size.width / 4,
+                      height: MediaQuery.of(context).size.height,
+                      color: const Color.fromARGB(255, 224, 248, 242),
+                    )
+                  : const SizedBox.shrink(),
               Expanded(
                 child: SingleChildScrollView(
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    BoatItemsWidget.displayCatalog(
-                        context,
-                        dataEntries,
-                        isSelectedColor,
-                        thisClickedId,
-                        () => {
-                              setState(
-                                () {
-                                  print(dataEntries[BoatItemsWidget.thisIndex]
-                                      .buItemId);
-                                  thisClickedId =
-                                      dataEntries[BoatItemsWidget.thisIndex]
-                                          .buItemId;
-                                  isSelectedColor = true;
-                                },
-                              )
-                            }),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: BoatItemsWidget.displayCatalog(
+                          context,
+                          dataEntries,
+                          isSelectedColor,
+                          thisClickedId,
+                          () => {
+                                setState(
+                                  () {
+                                    print(dataEntries[BoatItemsWidget.thisIndex]
+                                        .buItemId);
+                                    thisClickedId =
+                                        dataEntries[BoatItemsWidget.thisIndex]
+                                            .buItemId;
+                                    isSelectedColor = true;
+                                  },
+                                )
+                              }),
+                    ),
                   ],
                 )),
               ),
-              Container(
-                width: MediaQuery.of(context).size.width / 4,
-                height: MediaQuery.of(context).size.height,
-                color: const Color.fromARGB(255, 224, 248, 242),
-              ),
+              kIsWeb
+                  ? Container(
+                      width: MediaQuery.of(context).size.width / 4,
+                      height: MediaQuery.of(context).size.height,
+                      color: const Color.fromARGB(255, 224, 248, 242),
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
         ),

@@ -43,32 +43,75 @@ class _ItemComponentState extends State<ItemComponent> {
               for (int i = 0; i < ProductModel.itemsData().length; i++)
                 ProductModel.itemsData()[i].buItemId == buId
                     ? !kIsWeb
-                        ? CarouselSlider(
-                            items: [
-                              for (int j = 0;
-                                  j <
-                                      ProductModel.itemsData()[i]
-                                          .buItemImages
-                                          .length;
-                                  j++)
-                                ItemImageWidget.ItemDetailsImageWidget(
+                        ? Column(
+                            children: [
+                              CarouselSlider(
+                                items: [
+                                  for (int j = 0;
+                                      j <
+                                          ProductModel.itemsData()[i]
+                                              .buItemImages
+                                              .length;
+                                      j++)
+                                    ItemImageWidget.ItemDetailsImageWidget(
+                                        context,
+                                        ProductModel.itemsData()[i]
+                                            .buItemImages[j],
+                                        selectColor),
+                                ],
+                                options: CarouselOptions(
+                                    enlargeCenterPage: true,
+                                    autoPlayInterval:
+                                        const Duration(seconds: 9),
+                                    autoPlay: true,
+                                    autoPlayCurve: Curves.fastOutSlowIn,
+                                    enableInfiniteScroll: true,
+                                    enlargeStrategy:
+                                        CenterPageEnlargeStrategy.zoom,
+                                    aspectRatio: 16 / 9,
+                                    viewportFraction: 1,
+                                    onPageChanged: (index, reason) {
+                                      setState(() {});
+                                    }),
+                                // ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ItemColorComponent().itemsColors(
                                     context,
-                                    ProductModel.itemsData()[i].buItemImages[j],
-                                    selectColor),
+                                    ProductModel.itemsData()[i].buItemColors,
+                                    () => {
+                                          setState(() {
+                                            selectColor =
+                                                ItemColorComponent.thisColor;
+                                          })
+                                        },
+                                    true,
+                                    false),
+                              ),
+                              Container(
+                                color: Colors.white,
+                                height: kIsWeb ? 30.0 : 10.0,
+                              ),
+                              Container(
+                                color: Colors.white,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: FloatingActionButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 111, 57, 53),
+                                        child: const Icon(Icons.arrow_back),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
                             ],
-                            options: CarouselOptions(
-                                enlargeCenterPage: true,
-                                autoPlayInterval: const Duration(seconds: 9),
-                                autoPlay: true,
-                                autoPlayCurve: Curves.fastOutSlowIn,
-                                enableInfiniteScroll: true,
-                                enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                                aspectRatio: 16 / 9,
-                                viewportFraction: 1,
-                                onPageChanged: (index, reason) {
-                                  setState(() {});
-                                }),
-                            // ),
                           )
                         : Row(children: [
                             Container(
@@ -157,6 +200,8 @@ class _ItemComponentState extends State<ItemComponent> {
                                                           : selectColor)
                                           ],
                                         ))),
+
+                                //add this section
                                 ItemColorComponent().itemsColors(
                                     context,
                                     ProductModel.itemsData()[i].buItemColors,
