@@ -1,4 +1,8 @@
+import 'dart:async';
+
 import 'package:boatusers/Models/productModel.dart';
+import 'package:boatusers/components/thumbDownItem.dart';
+import 'package:boatusers/components/thumbUpItem.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:flutter/foundation.dart';
@@ -20,6 +24,8 @@ class _ItemComponentState extends State<ItemComponent> {
   bool isColorChanged = false;
   bool isImageHovered = false;
   int hoveredImageIndex = 0;
+  bool isThumbsUpClicked = false;
+  bool isThumbsDownClicked = false;
 
   @override
   void dispose() {
@@ -89,26 +95,49 @@ class _ItemComponentState extends State<ItemComponent> {
                                     true,
                                     false),
                               ),
-                              Container(
-                                color: Colors.white,
-                                height: kIsWeb ? 30.0 : 10.0,
-                              ),
-                              Container(
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: FloatingActionButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 111, 57, 53),
-                                        child: const Icon(Icons.arrow_back),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Container(
+                                  color: Colors.white,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: FloatingActionButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 111, 57, 53),
+                                          child: const Icon(Icons.arrow_back),
+                                        ),
                                       ),
-                                    )
-                                  ],
+                                      IconButton(
+                                          color: isThumbsUpClicked &&
+                                                  !isThumbsDownClicked
+                                              ? Colors.red
+                                              : Colors.transparent,
+                                          onPressed: () {
+                                            setState(() {
+                                              isThumbsDownClicked = false;
+                                              isThumbsUpClicked = true;
+                                            });
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const ThumUpItem(),
+                                                    settings: RouteSettings(
+                                                        arguments: {
+                                                          'buThumbUpItemId':
+                                                              ProductModel
+                                                                      .itemsData()[i]
+                                                                  .buItemId,
+                                                        })));
+                                          },
+                                          icon: const Icon(
+                                              Icons.thumb_up_off_alt_sharp))
+                                    ],
+                                  ),
                                 ),
                               )
                             ],
@@ -217,21 +246,80 @@ class _ItemComponentState extends State<ItemComponent> {
                                   color: Colors.white,
                                   height: kIsWeb ? 30.0 : 10.0,
                                 ),
-                                Container(
-                                  color: Colors.white,
-                                  child: Row(
-                                    children: [
-                                      FloatingActionButton(
+                                Row(
+                                  children: [
+                                    FloatingActionButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 111, 57, 53),
+                                      child: const Icon(Icons.arrow_back),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: IconButton(
+                                        color: isThumbsUpClicked &&
+                                                !isThumbsDownClicked
+                                            ? Colors.red
+                                            : null,
                                         onPressed: () {
-                                          Navigator.pop(context);
+                                          setState(() {
+                                            isThumbsDownClicked = false;
+                                            isThumbsUpClicked = true;
+                                          });
+                                          Timer(const Duration(seconds: 1), () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const ThumUpItem(),
+                                                    settings: RouteSettings(
+                                                        arguments: {
+                                                          'buThumbUpItemId':
+                                                              ProductModel
+                                                                      .itemsData()[i]
+                                                                  .buItemId,
+                                                        })));
+                                          });
                                         },
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 111, 57, 53),
-                                        child: const Icon(Icons.arrow_back),
-                                      )
-                                    ],
-                                  ),
-                                )
+                                        icon: const Icon(
+                                            Icons.thumb_up_alt_rounded),
+                                        iconSize: kIsWeb ? 40.0 : 20.0,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: IconButton(
+                                        color: isThumbsDownClicked &&
+                                                !isThumbsUpClicked
+                                            ? Colors.grey
+                                            : null,
+                                        onPressed: () {
+                                          setState(() {
+                                            isThumbsUpClicked = false;
+                                            isThumbsDownClicked = true;
+                                          });
+                                          Timer(const Duration(seconds: 1), () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const ThumbDownItem(),
+                                                    settings: RouteSettings(
+                                                        arguments: {
+                                                          'buThumbDownItemId':
+                                                              ProductModel
+                                                                      .itemsData()[i]
+                                                                  .buItemId,
+                                                        })));
+                                          });
+                                        },
+                                        icon: const Icon(
+                                            Icons.thumb_down_alt_rounded),
+                                        iconSize: kIsWeb ? 40.0 : 20.0,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ],
                             ),
                             Container(
