@@ -1,4 +1,6 @@
+import 'package:boatusers/Models/customerServices.dart';
 import 'package:boatusers/components/ItemsDetail/ItemsWidgets/itemListHorizantal.dart';
+import 'package:boatusers/components/ItemsDetail/sideWidget.dart';
 import 'package:boatusers/components/searchWidget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -76,10 +78,15 @@ class _BoatItemsState extends State<BoatItems> {
           child: Row(
             children: [
               kIsWeb
-                  ? Container(
+                  ? SizedBox(
                       width: MediaQuery.of(context).size.width / 4,
                       height: MediaQuery.of(context).size.height,
-                      color: const Color.fromARGB(255, 224, 248, 242),
+                      child: SideWidget.sideComponentDisplay(
+                          (bool thisValue) => setState(() {
+                                print(thisValue);
+                                CustomerServicesModel.checkBoxIsChecked =
+                                    thisValue;
+                              })),
                     )
                   : const SizedBox.shrink(),
               Expanded(
