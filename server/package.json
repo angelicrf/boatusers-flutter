@@ -6,8 +6,8 @@
   "scripts": {
     "start": "nodemon index",
     "client-web": "cd .. && flutter run -d chrome",
-    "client-android": "cd .. && flutter run",
-    "dev-device": "concurrently \"npm start\" \"npm run client-android\"",
+    "client-device": "cd .. && flutter run",
+    "dev-device": "concurrently \"npm start\" \"npm run client-device\"",
     "dev-web": "concurrently \"npm start\" \"npm run client-web\""
   },
   "author": "BUsers",

@@ -1,7 +1,6 @@
 import 'package:boatusers/components/apiUserProfileFuncs.dart';
 import 'package:boatusers/components/searchWidget.dart';
-import 'package:boatusers/components/userProfileModel.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:boatusers/Models/userProfileModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -95,14 +94,14 @@ class _UserProfileState extends State<UserProfile> {
 }
 
 Widget userProfileForm(
-    GlobalKey<FormState> _formKey,
+    GlobalKey<FormState> formKey,
     BuildContext context,
     TextEditingController formController,
     TextEditingController passwordController,
     void Function() thisState,
     void Function() thisBoolState) {
   return Form(
-    key: _formKey,
+    key: formKey,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -170,7 +169,7 @@ Widget userProfileForm(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
+                  if (formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Processing Data')),
                     );
@@ -199,12 +198,14 @@ Widget userProfileForm(
 Widget mngDbGetDataDisplay(
     bool isMngdbGet, void Function() thisState, BuildContext context) {
   if (isMngdbGet) {
+    print(isMngdbGet);
     thisState();
     return Expanded(
         child: FutureBuilder<List<UserProfileModel>>(
       future: APIUserProfileFuncs.getAllUsers(),
       builder: (context, posts) {
         if (posts.hasData) {
+          print(posts);
           return ListView(
             //shrinkWrap: true,
             children: APIUserProfileFuncs.buildMngData(posts.data!, context),
@@ -214,8 +215,9 @@ Widget mngDbGetDataDisplay(
         }
       },
     ));
-  } else
+  } else {
     return const SizedBox.shrink();
+  }
 }
 
 Widget mngDbPostDataDisplay(

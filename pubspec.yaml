@@ -44,7 +44,11 @@ dependencies:
   google_nav_bar: ^5.0.6
   footer: ^0.0.4
   http: ^0.13.5
+  upgrader: ^6.2.0
+  carousel_slider: ^4.2.1
+  faker: ^2.1.0
 
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
