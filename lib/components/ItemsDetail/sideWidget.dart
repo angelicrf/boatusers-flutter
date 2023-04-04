@@ -5,7 +5,8 @@ import '../../Models/customerServices.dart';
 
 class SideWidget {
   static Widget sideComponentDisplay(
-      void Function(bool thisCValue) thisCheckFunc) {
+      void Function(bool thisCValue) thisCheckFunc,
+      void Function(bool thisCValue) thisStarFunc) {
     return ListView.separated(
         shrinkWrap: true,
         itemCount: CustomerServicesModel.customerServicesData().length,
@@ -34,7 +35,9 @@ class SideWidget {
                         .buCSTopics[0]
                         .buCSSubTopics[0]
                         .buCSTopicsSCategories[i] is Row)
-                      CustomerServicesModel.customerServicesData()[index]
+                      CustomerServicesModel.customerServicesData(
+                        thisStar: (thisValue) => thisStarFunc(thisValue),
+                      )[index]
                           .buCSTopics[0]
                           .buCSSubTopics[0]
                           .buCSTopicsSCategories[i]
@@ -43,10 +46,11 @@ class SideWidget {
                         .buCSSubTopics[0]
                         .buCSTopicsSCategories[i] is String)
                       InkWell(
-                          child: Text(CustomerServicesModel.customerServicesData()[index]
-                              .buCSTopics[0]
-                              .buCSSubTopics[0]
-                              .buCSTopicsSCategories[i]),
+                          child: Text(
+                              CustomerServicesModel.customerServicesData()[index]
+                                  .buCSTopics[0]
+                                  .buCSSubTopics[0]
+                                  .buCSTopicsSCategories[i]),
                           onTap: () =>
                               launchUrl(Uri.parse('https://www.example.com')))
                     else if (CustomerServicesModel.customerServicesData()[index]

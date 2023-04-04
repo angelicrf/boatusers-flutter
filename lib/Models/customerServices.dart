@@ -6,11 +6,17 @@ class CustomerServicesModel {
   static bool isCheckedOne = false;
   static bool checkBoxIsChecked = false;
   static bool isCheckedTwo = false;
+  static bool isClickedStarOne = false;
+  static bool isClickedStarTwo = false;
+  static bool isClickedStarThree = false;
+  static bool isClickedStarFour = false;
+  static bool isClickedStarFive = false;
 
   CustomerServicesModel({required this.buTopicId, required this.buCSTopics});
 
   static List<CustomerServicesModel> customerServicesData(
-      {void Function(bool thisValue)? thisCheck}) {
+      {void Function(bool thisValue)? thisCheck,
+      void Function(bool thisValue)? thisStar}) {
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
@@ -80,20 +86,56 @@ class CustomerServicesModel {
         CSTopicModel(topicName: 'topicThree', buCSSubTopics: [
           CSTopicSubCategoriesModel(buCSTopicsSCategories: [
             Row(children: [
-              for (int k = 0; k < createStars().length; k++)
-                Listener(
-                  onPointerDown: (event) => {
-                    print('clickedIcon $k'),
-                    //createStars(),
-                    //newList[k].icon = Colors.amber
-                  },
-                  child: createStars()[k],
-                ),
+              Listener(
+                onPointerDown: (event) => {
+                  print('clickedIcon'),
+                  isClickedStarOne = true,
+                  thisStar!(isClickedStarOne),
+                },
+                child: Icon(Icons.star,
+                    color: isClickedStarOne ? Colors.red : Colors.grey),
+              ),
+              Listener(
+                onPointerDown: (event) => {
+                  print('clickedIcon'),
+                  isClickedStarTwo = true,
+                  thisStar!(isClickedStarTwo),
+                },
+                child: Icon(Icons.star,
+                    color: isClickedStarTwo ? Colors.red : Colors.grey),
+              ),
+              Listener(
+                onPointerDown: (event) => {
+                  print('clickedIcon'),
+                  isClickedStarThree = true,
+                  thisStar!(isClickedStarThree),
+                },
+                child: Icon(Icons.star,
+                    color: isClickedStarThree ? Colors.red : Colors.grey),
+              ),
+              Listener(
+                onPointerDown: (event) => {
+                  print('clickedIcon'),
+                  isClickedStarFour = true,
+                  thisStar!(isClickedStarFour),
+                },
+                child: Icon(Icons.star,
+                    color: isClickedStarFour ? Colors.red : Colors.grey),
+              ),
+              Listener(
+                onPointerDown: (event) => {
+                  print('clickedIcon'),
+                  isClickedStarFive = true,
+                  thisStar!(isClickedStarFive),
+                },
+                child: Icon(Icons.star,
+                    color: isClickedStarFive ? Colors.red : Colors.grey),
+              ),
               const Text(
                 '&Up',
                 style: TextStyle(fontSize: 18.0),
               ),
-            ]),
+            ])
           ])
         ])
       ]),

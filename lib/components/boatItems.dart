@@ -82,11 +82,12 @@ class _BoatItemsState extends State<BoatItems> {
                       width: MediaQuery.of(context).size.width / 4,
                       height: MediaQuery.of(context).size.height,
                       child: SideWidget.sideComponentDisplay(
-                          (bool thisValue) => setState(() {
-                                print(thisValue);
-                                CustomerServicesModel.checkBoxIsChecked =
-                                    thisValue;
-                              })),
+                        (bool thisValue) => setState(() {
+                          print(thisValue);
+                          CustomerServicesModel.checkBoxIsChecked = thisValue;
+                        }),
+                        (bool thisValue) => setState(() {}),
+                      ),
                     )
                   : const SizedBox.shrink(),
               Expanded(
