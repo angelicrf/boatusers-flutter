@@ -47,7 +47,7 @@ dependencies:
   upgrader: ^6.2.0
   carousel_slider: ^4.2.1
   faker: ^2.1.0
-
+  url_launcher: ^6.1.10
   
 dev_dependencies:
   flutter_test:

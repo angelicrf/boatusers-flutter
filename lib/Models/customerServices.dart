@@ -74,10 +74,45 @@ class CustomerServicesModel {
                       }
                     : null),
           ])
+        ]),
+      ]),
+      CustomerServicesModel(buTopicId: '3', buCSTopics: [
+        CSTopicModel(topicName: 'topicThree', buCSSubTopics: [
+          CSTopicSubCategoriesModel(buCSTopicsSCategories: [
+            Row(children: [
+              for (int k = 0; k < createStars().length; k++)
+                Listener(
+                  onPointerDown: (event) => {
+                    print('clickedIcon $k'),
+                    //createStars(),
+                    //newList[k].icon = Colors.amber
+                  },
+                  child: createStars()[k],
+                ),
+              const Text(
+                '&Up',
+                style: TextStyle(fontSize: 18.0),
+              ),
+            ]),
+          ])
         ])
       ]),
     ];
     return thisCustomerServicesList;
+  }
+
+  static List<Icon> createStars() {
+    List<Icon> newList = [];
+    bool isSelectedIcon = false;
+    for (var i = 0; i < 5; i++) {
+      Icon thisIcon = Icon(
+        Icons.star,
+        color: !isSelectedIcon ? Colors.grey : Colors.red,
+      );
+      Listener(onPointerHover: (event) => print('movedIcon'), child: thisIcon);
+      newList.add(thisIcon);
+    }
+    return newList;
   }
 }
 

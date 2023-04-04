@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Models/customerServices.dart';
 
@@ -32,11 +33,22 @@ class SideWidget {
                     if (CustomerServicesModel.customerServicesData()[index]
                         .buCSTopics[0]
                         .buCSSubTopics[0]
-                        .buCSTopicsSCategories[i] is String)
-                      Text(CustomerServicesModel.customerServicesData()[index]
+                        .buCSTopicsSCategories[i] is Row)
+                      CustomerServicesModel.customerServicesData()[index]
                           .buCSTopics[0]
                           .buCSSubTopics[0]
-                          .buCSTopicsSCategories[i])
+                          .buCSTopicsSCategories[i]
+                    else if (CustomerServicesModel.customerServicesData()[index]
+                        .buCSTopics[0]
+                        .buCSSubTopics[0]
+                        .buCSTopicsSCategories[i] is String)
+                      InkWell(
+                          child: Text(CustomerServicesModel.customerServicesData()[index]
+                              .buCSTopics[0]
+                              .buCSSubTopics[0]
+                              .buCSTopicsSCategories[i]),
+                          onTap: () =>
+                              launchUrl(Uri.parse('https://www.example.com')))
                     else if (CustomerServicesModel.customerServicesData()[index]
                         .buCSTopics[0]
                         .buCSSubTopics[0]
